@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { makeMaterial } from '../lib/materials'
 import { PARTS } from '../config/parts'
@@ -12,6 +12,8 @@ export default function Model() {
   const selection = useConfigurator((s: ConfigState) => s.selection)
   const tiling = useConfigurator((s: ConfigState) => s.tiling)
   const pattern = useConfigurator((s: ConfigState) => s.pattern)
+
+   const [velocity, setVelocity] = useState(0)
 
   const panels = useMemo(() => {
     const g = new THREE.Group()
@@ -58,13 +60,19 @@ export default function Model() {
 
   useFrame((_, dt) => {
     if (!group.current) return
-    group.current.rotation.y = THREE.MathUtils.damp(
-      group.current.rotation.y,
-      rotationY,
-      6, // smoothing factor (higher = snappier)
-      dt
-    )
+
+    // Calculate difference to target
+    const diff = rotationY - group.current.rotation.y
+
+    // Apply acceleration toward target
+    const acceleration = diff * 10
+    const newVelocity = velocity * 0.9 + acceleration * dt
+    setVelocity(newVelocity)
+
+    // Apply velocity
+    group.current.rotation.y += newVelocity * dt
   })
+
 
   return (
     <group ref={group}>

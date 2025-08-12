@@ -13,12 +13,20 @@ export default function Viewer() {
         <Model />
         <OrbitControls enablePan={false} minDistance={3} maxDistance={12} />
       </Canvas>
-      <div style={{ position: 'absolute', top: 16, left: 16 }}>
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          bottom: 16,
+          transform: 'translateX(-50%)',
+        }}
+      >
         <RotateControls />
       </div>
+
       <div style={{ position: 'absolute', top: 16, right: 16 }}>
         <PartPicker />
       </div>
     </div>
-  )
+  );
 }
