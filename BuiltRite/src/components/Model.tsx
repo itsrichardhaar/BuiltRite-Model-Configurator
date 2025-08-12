@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { makeMaterial } from '../lib/materials'
 import { PARTS } from '../config/parts'
@@ -12,8 +12,6 @@ export default function Model() {
   const selection = useConfigurator((s: ConfigState) => s.selection)
   const tiling = useConfigurator((s: ConfigState) => s.tiling)
   const pattern = useConfigurator((s: ConfigState) => s.pattern)
-
-   const [velocity, setVelocity] = useState(0)
 
   const panels = useMemo(() => {
     const g = new THREE.Group()
