@@ -59,19 +59,16 @@ export default function Model() {
   })
 
   useFrame((_, dt) => {
-    if (!group.current) return
-
-    // Calculate difference to target
-    const diff = rotationY - group.current.rotation.y
-
-    // Apply acceleration toward target
-    const acceleration = diff * 10
-    const newVelocity = velocity * 0.9 + acceleration * dt
-    setVelocity(newVelocity)
-
-    // Apply velocity
-    group.current.rotation.y += newVelocity * dt
-  })
+  if (!group.current) return;
+  // Smoothly ease current rotation toward rotationY
+  // 6 = smoothing factor (higher = snappier, lower = floatier)
+  group.current.rotation.y = THREE.MathUtils.damp(
+    group.current.rotation.y,
+    rotationY,
+    6,
+    dt
+  );
+});
 
 
   return (
