@@ -7,11 +7,14 @@ export default function PartPicker() {
   const selection = useConfigurator((s: ConfigState) => s.selection)
   const setSelection = useConfigurator((s: ConfigState) => s.setSelection)
 
+  const partsWithOptions = PARTS.filter(p => TEXTURE_SETS[p.id]?.length)
+
   return (
     <div style={{ padding: 12, background: 'rgba(255,255,255,0.95)', borderRadius: 12, minWidth: 280 }}>
       <strong style={{ display: 'block', marginBottom: 8 }}>Customize</strong>
-      {PARTS.map((part) => {
-        const options = TEXTURE_SETS[part.id] || []
+
+      {partsWithOptions.map((part) => {
+        const options = TEXTURE_SETS[part.id]
         return (
           <div key={part.id} style={{ marginBottom: 14 }}>
             <div style={{ fontSize: 12, marginBottom: 6, fontWeight: 600 }}>{part.label}</div>
@@ -23,9 +26,9 @@ export default function PartPicker() {
                   border: isSel ? '2px solid #111' : '1px solid #d0d0d0',
                   background: opt.type === 'color' ? opt.value : '#c9cdd3',
                   backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                 }
-                // Optional: if you want to show a real PBR preview, uncomment:
-                // if (opt.type === 'pbr') style.backgroundImage = `url(${opt.albedo})`
+                if (opt.type === 'pbr') style.backgroundImage = `url(${opt.albedo})`
 
                 return (
                   <button
@@ -51,3 +54,4 @@ function eq(a?: MaterialChoice | null, b?: MaterialChoice | null) {
   if (a.type === 'pbr' && b.type === 'pbr') return a.name === b.name
   return false
 }
+

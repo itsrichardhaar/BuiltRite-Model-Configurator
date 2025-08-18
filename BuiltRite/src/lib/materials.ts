@@ -14,7 +14,6 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   if (isColorMap) {
     // three r152+: use colorSpace; older versions use encoding = sRGBEncoding
     ;(t as any).colorSpace = (THREE as any).SRGBColorSpace ?? undefined
-    if (!(t as any).colorSpace) (t as any).encoding = THREE.sRGBEncoding
   }
   cache.set(url, t)
   return t
