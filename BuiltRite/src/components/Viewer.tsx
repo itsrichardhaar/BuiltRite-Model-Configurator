@@ -1,3 +1,4 @@
+// src/components/Viewer.tsx
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import Model from './Model'
@@ -7,26 +8,50 @@ import PartPicker from './ui/PartPicker'
 export default function Viewer() {
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
-      <Canvas camera={{ position: [0, 2, 12], fov: 35 }}>
-        <ambientLight intensity={0.7} />
-        <directionalLight intensity={0.9} position={[2, 4, 2]} />
-        <Model />
-        <OrbitControls enablePan={false} minDistance={50} maxDistance={124} />
-      </Canvas>
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          bottom: 16,
-          transform: 'translateX(-50%)',
-        }}
+      <Canvas
+        shadows
+        camera={{ position: [0, 2, 12], fov: 45 }}
+        // Option A: quick — solid background via style
+        style={{ background: '#f8f8f4' }}
+
+        // Option B: precise — set clear color in WebGL (uncomment if you prefer)
+        // onCreated={({ gl }) => {
+        //   gl.toneMapping = THREE.ACESFilmicToneMapping
+        //   gl.outputColorSpace = THREE.SRGBColorSpace
+        //   gl.toneMappingExposure = 1.0
+        //   gl.setClearColor('#f8f8f4')
+        // }}
       >
+        <ambientLight intensity={0.3} />
+        <directionalLight
+          position={[10, 15, 5]}
+          intensity={0.9}
+          castShadow
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+        />
+
+        <Model />
+
+        <OrbitControls
+          enablePan={false}
+          minDistance={30}   // keep your values
+          maxDistance={124}
+        />
+      </Canvas>
+
+      {/* Bottom-centered rotation controls */}
+      <div style={{ position: 'absolute', left: '50%', bottom: 16, transform: 'translateX(-50%)' }}>
         <RotateControls />
       </div>
 
+      {/* Part picker stays top-right */}
       <div style={{ position: 'absolute', top: 16, right: 16 }}>
         <PartPicker />
       </div>
     </div>
-  );
+  )
 }
+
+
+

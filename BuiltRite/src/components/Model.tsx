@@ -1,5 +1,6 @@
+// src/components/Model.tsx
 import * as THREE from 'three'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { makeMaterial } from '../lib/materials'
@@ -18,15 +19,15 @@ export default function Model() {
   const tiling = useConfigurator((s: ConfigState) => s.tiling)
   const pattern = useConfigurator((s: ConfigState) => s.pattern)
 
-  // Inertia (keeps your eased rotation feel)
+  // Inertia (eased rotation)
   const [velocity, setVelocity] = useState(0)
 
   // Load GLB and clone so we can safely mutate materials
   const { scene } = useGLTF(MODEL_URL)
   const root = useMemo(() => scene.clone(true), [scene])
 
-  // (Optional) Log all mesh names once to help fill PARTS.meshNames
-  useMemo(() => {
+  // Log mesh names once to help fill PARTS.meshNames
+  useEffect(() => {
     const names: string[] = []
     root.traverse((o: any) => {
       if (o?.isMesh && typeof o.name === 'string') names.push(o.name)
@@ -35,8 +36,25 @@ export default function Model() {
     console.log('[GLB mesh names]', names)
   }, [root])
 
+  // Ground the model (sit lowest point at y=0) and enable shadows
+  useEffect(() => {
+    // Set cast/receive on all meshes
+    root.traverse((o: any) => {
+      if (o?.isMesh) {
+        o.castShadow = true
+        o.receiveShadow = true
+      }
+    })
+    // Compute bbox and lift so minY is at 0
+    const box = new THREE.Box3().setFromObject(root)
+    const minY = box.min.y
+    if (isFinite(minY)) {
+      root.position.y -= minY
+    }
+  }, [root])
+
   // Initialize defaults (first material, tiling=1, pattern=all) for each part
-  useMemo(() => {
+  useEffect(() => {
     for (const part of PARTS) {
       if (!selection[part.id]) {
         const first = TEXTURE_SETS[part.id]?.[0]
@@ -45,6 +63,8 @@ export default function Model() {
       if (tiling[part.id] == null) useConfigurator.getState().setTiling(part.id, 1)
       if (!pattern[part.id]) useConfigurator.getState().setPattern(part.id, 'all')
     }
+    // We intentionally read from getState() above; deps here are fine as-is
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selection, tiling, pattern])
 
   // Quick lookup: meshName -> partId
@@ -65,8 +85,8 @@ export default function Model() {
       const rep = tiling[partId] ?? 1
       const mode = pattern[partId] ?? 'all'
 
-      // Pattern: if alternate, only even-indexed meshes (parse trailing number)
       if (mode === 'alternate') {
+        // Only apply to even-numbered meshes when name ends with digits
         const num = parseInt(obj.name.match(/(\d+)$/)?.[1] ?? '0', 10)
         if (num % 2 !== 0) {
           obj.material = new THREE.MeshStandardMaterial({ color: '#bbbbbb' })
@@ -96,3 +116,4 @@ export default function Model() {
 }
 
 useGLTF.preload(MODEL_URL)
+ 

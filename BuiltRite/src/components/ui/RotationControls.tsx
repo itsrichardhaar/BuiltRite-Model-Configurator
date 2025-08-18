@@ -16,7 +16,7 @@ export default function RotateControls() {
   return (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
       <button onClick={() => rotateBy(-Math.PI / 8)} title="Rotate Left">◀</button>
-      <span style={{ fontSize: 12, color: '#fff' }}>Rotate</span>
+      <span style={{ fontSize: 12, color: '#000' }}>Rotate</span>
       <button onClick={() => rotateBy(Math.PI / 8)} title="Rotate Right">▶</button>
     </div>
   )

@@ -4,9 +4,9 @@ export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
   facadeA: [
     // Colors
     { type: 'color', name: 'Paint: White', value: '#f5f5f7' },
-    { type: 'color', name: 'Paint: Charcoal', value: '#333333' },
+    { type: 'color', name: 'Paint: Charcoal', value: '#D7282F' },
     { type: 'color', name: 'Paint: Sand', value: '#d9c9a3' },
-    { type: 'color', name: 'Paint: Navy', value: '#0a2342' },
+    { type: 'color', name: 'Paint: Navy', value: '#fff' },
 
     // PBR (uncomment/use if you have these maps placed under /public)
     // {
