@@ -7,11 +7,11 @@ import PartPicker from './ui/PartPicker'
 export default function Viewer() {
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
-      <Canvas camera={{ position: [0, 1.2, 6], fov: 45 }}>
+      <Canvas camera={{ position: [0, 2, 12], fov: 35 }}>
         <ambientLight intensity={0.7} />
         <directionalLight intensity={0.9} position={[2, 4, 2]} />
         <Model />
-        <OrbitControls enablePan={false} minDistance={3} maxDistance={12} />
+        <OrbitControls enablePan={false} minDistance={50} maxDistance={124} />
       </Canvas>
       <div
         style={{

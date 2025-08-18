@@ -1,77 +1,98 @@
 import * as THREE from 'three'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import { makeMaterial } from '../lib/materials'
 import { PARTS } from '../config/parts'
 import { TEXTURE_SETS } from '../config/textures'
 import { useConfigurator, type ConfigState } from '../state/useConfigurator'
 
+const MODEL_URL = '/models/building_01.glb'
+
 export default function Model() {
   const group = useRef<THREE.Group>(null!)
+
+  // Store/state
   const rotationY = useConfigurator((s: ConfigState) => s.rotationY)
   const selection = useConfigurator((s: ConfigState) => s.selection)
   const tiling = useConfigurator((s: ConfigState) => s.tiling)
   const pattern = useConfigurator((s: ConfigState) => s.pattern)
 
-  const panels = useMemo(() => {
-    const g = new THREE.Group()
-    const panelGeo = new THREE.BoxGeometry(0.9, 2, 0.1)
-    for (let i = 0; i < 8; i++) {
-      const mat = new THREE.MeshStandardMaterial({ color: 'lightgray' })
-      const mesh = new THREE.Mesh(panelGeo, mat)
-      mesh.name = `Panel_${String(i + 1).padStart(2, '0')}`
-      mesh.position.x = -3.15 + i * 0.9
-      g.add(mesh)
-    }
-    const base = new THREE.Mesh(new THREE.BoxGeometry(8, 0.1, 2), new THREE.MeshStandardMaterial({ color: '#dadada' }))
-    base.position.y = -1.05
-    g.add(base)
-    return g
-  }, [])
+  // Inertia (keeps your eased rotation feel)
+  const [velocity, setVelocity] = useState(0)
 
+  // Load GLB and clone so we can safely mutate materials
+  const { scene } = useGLTF(MODEL_URL)
+  const root = useMemo(() => scene.clone(true), [scene])
+
+  // (Optional) Log all mesh names once to help fill PARTS.meshNames
   useMemo(() => {
-    const part = PARTS[0]
-    if (!selection[part.id]) {
-      const first = TEXTURE_SETS[part.id]?.[0]
-      if (first) useConfigurator.getState().setSelection(part.id, first)
+    const names: string[] = []
+    root.traverse((o: any) => {
+      if (o?.isMesh && typeof o.name === 'string') names.push(o.name)
+    })
+    // eslint-disable-next-line no-console
+    console.log('[GLB mesh names]', names)
+  }, [root])
+
+  // Initialize defaults (first material, tiling=1, pattern=all) for each part
+  useMemo(() => {
+    for (const part of PARTS) {
+      if (!selection[part.id]) {
+        const first = TEXTURE_SETS[part.id]?.[0]
+        if (first) useConfigurator.getState().setSelection(part.id, first)
+      }
+      if (tiling[part.id] == null) useConfigurator.getState().setTiling(part.id, 1)
+      if (!pattern[part.id]) useConfigurator.getState().setPattern(part.id, 'all')
     }
-    if (tiling[part.id] == null) useConfigurator.getState().setTiling(part.id, 1)
-    if (!pattern[part.id]) useConfigurator.getState().setPattern(part.id, 'all')
   }, [selection, tiling, pattern])
 
-  useFrame(() => {
-    if (!group.current) return
-    const part = PARTS[0]
-    const sel = selection[part.id]
-    const rep = tiling[part.id] ?? 1
-    const mode = pattern[part.id] ?? 'all'
+  // Quick lookup: meshName -> partId
+  const meshToPart = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const part of PARTS) for (const n of part.meshNames) map.set(n, part.id)
+    return map
+  }, [])
 
-    group.current.traverse((obj: any) => {
-      if (!obj.isMesh) return
-      if (!obj.name.startsWith('Panel_')) return
-      const idx = parseInt(obj.name.slice(-2), 10)
-      const allow = mode === 'all' ? true : idx % 2 === 0
-      const targetMat = allow && sel ? makeMaterial(sel, rep) : new THREE.MeshStandardMaterial({ color: '#bbb' })
-      obj.material = targetMat
+  // Apply materials every frame based on UI state (selection, tiling, pattern)
+  useFrame(() => {
+    root.traverse((obj: any) => {
+      if (!obj?.isMesh) return
+      const partId = meshToPart.get(obj.name)
+      if (!partId) return
+
+      const sel = selection[partId]
+      const rep = tiling[partId] ?? 1
+      const mode = pattern[partId] ?? 'all'
+
+      // Pattern: if alternate, only even-indexed meshes (parse trailing number)
+      if (mode === 'alternate') {
+        const num = parseInt(obj.name.match(/(\d+)$/)?.[1] ?? '0', 10)
+        if (num % 2 !== 0) {
+          obj.material = new THREE.MeshStandardMaterial({ color: '#bbbbbb' })
+          return
+        }
+      }
+
+      obj.material = sel ? makeMaterial(sel, rep) : new THREE.MeshStandardMaterial({ color: '#bbbbbb' })
     })
   })
 
+  // Smooth rotation with a touch of inertia
   useFrame((_, dt) => {
-  if (!group.current) return;
-  // Smoothly ease current rotation toward rotationY
-  // 6 = smoothing factor (higher = snappier, lower = floatier)
-  group.current.rotation.y = THREE.MathUtils.damp(
-    group.current.rotation.y,
-    rotationY,
-    6,
-    dt
-  );
-});
-
+    if (!group.current) return
+    const diff = rotationY - group.current.rotation.y
+    const acceleration = diff * 10
+    const newVelocity = velocity * 0.9 + acceleration * dt
+    setVelocity(newVelocity)
+    group.current.rotation.y += newVelocity * dt
+  })
 
   return (
     <group ref={group}>
-      <primitive object={panels} />
+      <primitive object={root} />
     </group>
   )
 }
+
+useGLTF.preload(MODEL_URL)
