@@ -65,11 +65,19 @@ const STUCCO_CONCRETE = {
   normal: '/textures/stucco/gravel_concrete_normal.jpg',
 } as const
 
+const STUCCO_PLASTER = {
+  type: 'pbr',
+  name: 'Stucco (Painted Plaster)',
+  diff: '/textures/stucco/painted_plaster_wall_diff_4k.jpg',
+  albedo: '/textures/stucco/painted_plaster_wall_diff_4k.jpg',
+  normal: '/textures/stucco/painted_plaster_wall_normal.jpg',
+} as const
+
 // Only provide sets for "walls" (Primary Walls) and "windows" (Base).
 // Leave the others out so they don't show any UI or change.
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE],
-  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE],
+  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE, STUCCO_PLASTER],
+  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE, STUCCO_PLASTER],
 }
 
 
