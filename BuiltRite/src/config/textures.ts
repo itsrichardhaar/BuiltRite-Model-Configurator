@@ -33,11 +33,19 @@ const METAL_SHEET = {
   normal: '/textures/metal/box_profile_metal_sheet_normal.jpg',
 } as const
 
+const METAL_CORRUGATED = {
+  type: 'pbr',
+  name: 'Metal (Corrugated)',
+  diff: '/textures/metal/corrugated_iron_02_diff_4k.jpg',
+  albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg',
+  normal: '/textures/metal/corrugated_iron_02_normal.jpg',
+} as const
+
 // Only provide sets for "walls" (Primary Walls) and "windows" (Base).
 // Leave the others out so they don't show any UI or change.
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET],
-  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET], // your "Base" part uses id "windows"
+  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED],
+  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED], // your "Base" part uses id "windows"
 }
 
 
