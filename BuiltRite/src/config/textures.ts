@@ -57,11 +57,19 @@ const STONE_WALL = {
   normal: '/textures/stone/rustic_stone_wall_02_normal.jpg',
 } as const
 
+const STUCCO_CONCRETE = {
+  type: 'pbr',
+  name: 'Stucco (Gravel Concrete)',
+  diff: '/textures/stucco/gravel_concrete_diff_4k.jpg',
+  albedo: '/textures/stucco/gravel_concrete_diff_4k.jpg',
+  normal: '/textures/stucco/gravel_concrete_normal.jpg',
+} as const
+
 // Only provide sets for "walls" (Primary Walls) and "windows" (Base).
 // Leave the others out so they don't show any UI or change.
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL],
-  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL], // your "Base" part uses id "windows"
+  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE],
+  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE],
 }
 
 
