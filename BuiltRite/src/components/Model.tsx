@@ -7,7 +7,7 @@ import { PARTS } from '../config/parts'
 import { TEXTURE_SETS } from '../config/textures'
 import { useConfigurator, type ConfigState } from '../state/useConfigurator'
 
-const MODEL_URL = '/models/building_01-2.glb'
+const MODEL_URL = '/models/building_01_v002.glb'
 
 export default function Model() {
   const group = useRef<THREE.Group>(null!)

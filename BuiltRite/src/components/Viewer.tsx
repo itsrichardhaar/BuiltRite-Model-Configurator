@@ -42,12 +42,13 @@ export default function Viewer() {
       </Canvas>
 
       {/* Bottom-centered rotation controls */}
-      <div style={{ position: 'absolute', left: '50%', bottom: 16, transform: 'translateX(-50%)' }}>
+      {/* Bottom-centered rotation controls (nudged up so it doesn't overlap the picker) */}
+      <div style={{ position: 'absolute', left: '10%', bottom: 16, transform: 'translateX(-50%)' }}>
         <RotateControls />
       </div>
 
-      {/* Part picker stays top-right */}
-      <div style={{ position: 'absolute', top: 16, right: 16 }}>
+      {/* Bottom-centered PartPicker toolbar */}
+      <div style={{ position: 'absolute', left: '50%', bottom: 16, transform: 'translateX(-50%)' }}>
         <PartPicker />
       </div>
     </div>
