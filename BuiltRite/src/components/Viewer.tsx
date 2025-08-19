@@ -41,6 +41,15 @@ export default function Viewer() {
         />
       </Canvas>
 
+      {/* Top-left image */}
+      <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 10 }}>
+        <img
+          src="/images/BRSS_logo.png"   // <-- change to your image path
+          alt="Logo"
+          style={{ height: 40, width: 'auto', display: 'block' }}
+        />
+      </div>
+
       {/* Bottom-centered rotation controls */}
       {/* Bottom-centered rotation controls (nudged up so it doesn't overlap the picker) */}
       <div style={{ position: 'absolute', left: '10%', bottom: 16, transform: 'translateX(-50%)' }}>
