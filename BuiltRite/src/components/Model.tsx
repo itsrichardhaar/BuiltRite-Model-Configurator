@@ -13,9 +13,11 @@ export default function Model() {
   const group = useRef<THREE.Group>(null!)
 
   const rotationY = useConfigurator((s: ConfigState) => s.rotationY)
+  const rotationX = useConfigurator((s: ConfigState) => s.rotationX)
   const selection = useConfigurator((s: ConfigState) => s.selection)
 
-  const [velocity, setVelocity] = useState(0)
+  const [velocityY, setVelocityY] = useState(0)
+  const [velocityX, setVelocityX] = useState(0)
 
   const { scene } = useGLTF(MODEL_URL)
   const root = useMemo(() => scene.clone(true), [scene])
@@ -58,14 +60,23 @@ export default function Model() {
     })
   })
 
-  // eased rotation / inertia
+  // eased rotation / inertia for both Y (yaw) and X (pitch)
   useFrame((_, dt) => {
     if (!group.current) return
-    const diff = rotationY - group.current.rotation.y
-    const acceleration = diff * 10
-    const newVelocity = velocity * 0.9 + acceleration * dt
-    setVelocity(newVelocity)
-    group.current.rotation.y += newVelocity * dt
+
+    // Y axis
+    const diffY = rotationY - group.current.rotation.y
+    const accelY = diffY * 10
+    const newVelY = velocityY * 0.9 + accelY * dt
+    setVelocityY(newVelY)
+    group.current.rotation.y += newVelY * dt
+
+    // X axis
+    const diffX = rotationX - group.current.rotation.x
+    const accelX = diffX * 10
+    const newVelX = velocityX * 0.9 + accelX * dt
+    setVelocityX(newVelX)
+    group.current.rotation.x += newVelX * dt
   })
 
   return (
@@ -76,6 +87,7 @@ export default function Model() {
 }
 
 useGLTF.preload(MODEL_URL)
+
 
 
 

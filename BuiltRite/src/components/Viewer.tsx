@@ -10,7 +10,7 @@ export default function Viewer() {
     <div style={{ position: 'absolute', inset: 0 }}>
       <Canvas
         shadows
-        camera={{ position: [0, 2, 12], fov: 45 }}
+        camera={{ position: [0, 6, 60], fov: 45 }}
         // Option A: quick — solid background via style
         style={{ background: '#f8f8f4' }}
 
@@ -37,6 +37,7 @@ export default function Viewer() {
           enablePan={false}
           minDistance={30}   // keep your values
           maxDistance={124}
+          target={[0, 0, 0]}
         />
       </Canvas>
 

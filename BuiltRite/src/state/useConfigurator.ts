@@ -13,7 +13,6 @@ export type PBRChoice = {
   normal?: string
   roughness?: string
   ao?: string
-  // optional tiling later: repeat?: number
 }
 
 export type MaterialChoice = ColorChoice | PBRChoice
@@ -24,6 +23,9 @@ export type ConfigState = {
 
   rotationY: number
   rotateBy: (delta: number) => void
+
+  rotationX: number
+  rotateXBy: (delta: number) => void
 }
 
 export const useConfigurator = create<ConfigState>((set) => ({
@@ -33,7 +35,17 @@ export const useConfigurator = create<ConfigState>((set) => ({
 
   rotationY: 0,
   rotateBy: (delta) => set((s) => ({ rotationY: s.rotationY + delta })),
+
+  rotationX: 0,
+  rotateXBy: (delta) =>
+    set((s) => {
+      // Clamp pitch to avoid flipping the model in Orbit-style UX
+      const MAX_PITCH = Math.PI / 2.5; // ~72°
+      const next = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, s.rotationX + delta))
+      return { rotationX: next }
+    }),
 }))
+
 
 
 
