@@ -119,7 +119,7 @@ export default function PartPicker() {
             const style: React.CSSProperties = {
               height: 32,
               width: 32,
-              borderRadius: 6,
+              borderRadius: 0,
               border: isSel ? '2px solid #111' : '1px solid #d0d0d0',
               background: opt.type === 'color' ? opt.value : '#c9cdd3',
               backgroundSize: 'cover',
@@ -199,7 +199,7 @@ function TabBtn({
         height: 32,
         padding: '0 12px',
         borderRadius: 999,
-        border: active ? '2px solid #111' : '1px solid #e2e2e2',
+        border: active ? '1px solid #111' : '1px solid #e2e2e2',
         background: active ? '#fff' : '#f4f4f4',
         color: '#000',
         cursor: 'pointer',

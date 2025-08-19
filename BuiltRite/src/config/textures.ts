@@ -4,27 +4,40 @@ import type { MaterialChoice } from '../state/useConfigurator'
 const BRICK_RED = {
   type: 'pbr',
   name: 'Brick (Red)',
-  albedo: '/textures/brick/uk1kcadew_4K_Albedo.jpg',
+  albedo: '/textures/brick/red_brick_diff.jpg',
+  diff: '/textures/brick/red_brick_diff.jpg',
+  normal: '/textures/brick/red_brick_normal.jpg'
 } as const
 
 const BRICK_LIGHT = {
   type: 'pbr',
-  name: 'Brick (Light)',
-  albedo: '/textures/brick/ukxlehdo_4K_Albedo.jpg',
+  name: 'Brick (Sandstone)',
+  albedo: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg',
+  diff: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg',
+  normal: '/textures/brick/seaworn_sandstone_brick_normal.jpg'
 } as const
 
-const BRICK_NORMAL = {
+const MASONRY_NORMAL = {
   type: 'pbr',
-  name: 'Brick (Normal)',
-  albedo: '/textures/brick/ukxlehdo_4K_Normal.jpg',
-  normal: '/textures/brick/ukxlehdo_4K_Normal.jpg',
+  name: 'Masonry (Normal)',
+  diff: '/textures/masonry/brick_wall_003_diffuse_4k.jpg',
+  albedo: '/textures/masonry/brick_wall_003_diffuse_4k.jpg',
+  normal: '/textures/masonry/brick_wall_003_normal.jpg',
+} as const
+
+const METAL_SHEET = {
+  type: 'pbr',
+  name: 'Metal (Sheet)',
+  diff: '/textures/metal/box_profile_metal_sheet_diff.jpg',
+  albedo: '/textures/metal/box_profile_metal_sheet_diff.jpg',
+  normal: '/textures/metal/box_profile_metal_sheet_normal.jpg',
 } as const
 
 // Only provide sets for "walls" (Primary Walls) and "windows" (Base).
 // Leave the others out so they don't show any UI or change.
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:   [BRICK_RED, BRICK_LIGHT, BRICK_NORMAL],
-  windows: [BRICK_RED, BRICK_LIGHT, BRICK_NORMAL], // your "Base" part uses id "windows"
+  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET],
+  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET], // your "Base" part uses id "windows"
 }
 
 
