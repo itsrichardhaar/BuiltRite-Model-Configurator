@@ -5,8 +5,8 @@ import { PARTS } from '../../config/parts'
 import { TEXTURE_SETS } from '../../config/textures'
 import { useConfigurator, type ConfigState, type MaterialChoice } from '../../state/useConfigurator'
 
-type Cat = 'Brick' | 'Metal' | 'Masonry'
-const ALL_CATS: Cat[] = ['Brick', 'Metal', 'Masonry']
+type Cat = 'Brick' | 'Metal' | 'Masonry' | 'Stone' | 'Stucco'
+const ALL_CATS: Cat[] = ['Brick', 'Metal', 'Masonry', 'Stone', 'Stucco']
 
 export default function PartPicker() {
   const selection = useConfigurator((s: ConfigState) => s.selection)
@@ -232,7 +232,9 @@ function inferCategory(opt: MaterialChoice): Cat | null {
   const s = haystacks.join(' ').toLowerCase()
   if (s.includes('/brick/') || s.includes(' brick')) return 'Brick'
   if (s.includes('/metal/') || s.includes(' metal') || s.includes('aluminum') || s.includes('steel') || s.includes('corten') || s.includes('copper') || s.includes('zinc')) return 'Metal'
-  if (s.includes('/masonry/') || s.includes('masonry') || s.includes('concrete') || s.includes('stone') || s.includes('stucco') || s.includes('cement') || s.includes('block') || s.includes('cmu')) return 'Masonry'
+  if (s.includes('/masonry/') || s.includes('masonry') || s.includes('concrete') || s.includes('stucco') || s.includes('cement') || s.includes('block') || s.includes('cmu')) return 'Masonry'
+  if (s.includes('/stone/') || s.includes('stone')) return 'Stone'
+  if (s.includes('/stucco/') || s.includes('stucco')) return 'Stucco'
   return null
 }
 
