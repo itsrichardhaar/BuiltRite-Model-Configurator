@@ -10,7 +10,7 @@ export default function Viewer() {
     <div style={{ position: 'absolute', inset: 0 }}>
       <Canvas
         shadows
-        camera={{ position: [0, 6, 60], fov: 45 }}
+        camera={{ position: [0, 6, 45], fov: 45 }}
         // Option A: quick — solid background via style
         style={{ background: '#f8f8f4' }}
 
@@ -22,10 +22,10 @@ export default function Viewer() {
         //   gl.setClearColor('#f8f8f4')
         // }}
       >
-        <ambientLight intensity={0.3} />
+        <ambientLight intensity={0.6} />
         <directionalLight
-          position={[10, 15, 5]}
-          intensity={0.9}
+          position={[0, 18, 60]}
+          intensity={1.05}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
