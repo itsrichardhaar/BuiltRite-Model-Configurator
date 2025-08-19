@@ -35,3 +35,6 @@ export const useConfigurator = create<ConfigState>((set) => ({
   rotateBy: (delta) => set((s) => ({ rotationY: s.rotationY + delta })),
 }))
 
+
+
+

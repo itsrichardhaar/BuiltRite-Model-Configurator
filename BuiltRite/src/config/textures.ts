@@ -4,13 +4,13 @@ import type { MaterialChoice } from '../state/useConfigurator'
 const BRICK_RED = {
   type: 'pbr',
   name: 'Brick (Red)',
-  albedo: '/textures/brick/uk1kcadew_4K_Albedo.jpg',
+  albedo: '/textures/uk1kcadew_4K_Albedo.jpg',
 } as const
 
 const BRICK_LIGHT = {
   type: 'pbr',
   name: 'Brick (Light)',
-  albedo: '/textures/brick/ukxlehdo_4K_Albedo.jpg',
+  albedo: '/textures/ukxlehdo_4K_Albedo.jpg',
 } as const
 
 // Only provide sets for "walls" (Primary Walls) and "windows" (Base).
@@ -19,5 +19,10 @@ export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
   walls:   [BRICK_RED, BRICK_LIGHT],
   windows: [BRICK_RED, BRICK_LIGHT], // your "Base" part uses id "windows"
 }
+
+
+
+
+
 
 
