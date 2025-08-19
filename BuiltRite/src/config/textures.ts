@@ -49,11 +49,19 @@ const METAL_FACTORY = {
   normal: '/textures/metal/facgtory_wall_normal.jpg',
 } as const
 
+const STONE_WALL = {
+  type: 'pbr',
+  name: 'Stone (Rustic Wall)',
+  diff: '/textures/stone/rustic_stone_wall_02_diff.jpg',
+  albedo: '/textures/stone/rustic_stone_wall_02_diff.jpg',
+  normal: '/textures/stone/rustic_stone_wall_02_normal.jpg',
+} as const
+
 // Only provide sets for "walls" (Primary Walls) and "windows" (Base).
 // Leave the others out so they don't show any UI or change.
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY],
-  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY], // your "Base" part uses id "windows"
+  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL],
+  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL], // your "Base" part uses id "windows"
 }
 
 
