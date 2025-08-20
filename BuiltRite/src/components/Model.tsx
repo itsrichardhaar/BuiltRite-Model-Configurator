@@ -68,7 +68,7 @@ export default function Model() {
     if (isFinite(minY)) root.position.y -= minY
 
     // 3) Make GLB ground shadow-only (invisible except shadows)
-    const GROUND_NAME_HINTS = ['ground', 'floor', 'plane', 'base']
+    const GROUND_NAME_HINTS = ['ground']
     root.traverse((o: any) => {
       if (!o?.isMesh) return
       const name = (o.name || '').toLowerCase()
