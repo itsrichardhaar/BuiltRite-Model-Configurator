@@ -1,84 +1,32 @@
+
 import type { MaterialChoice } from '../state/useConfigurator'
 
-// Two PBR entries using just albedo (normal/roughness/ao omitted for now)
-const BRICK_RED = {
-  type: 'pbr',
-  name: 'Brick (Red)',
-  albedo: '/textures/brick/red_brick_diff.jpg',
-  diff: '/textures/brick/red_brick_diff.jpg',
-  normal: '/textures/brick/red_brick_normal.jpg'
-} as const
+// Brick
+const BRICK_RED: MaterialChoice = { type: 'pbr', name: 'Brick Red',   albedo: '/textures/brick/red_brick_normal.jpg' }
+const BRICK_LIGHT: MaterialChoice = { type: 'pbr', name: 'Brick Light', albedo: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg' }
 
-const BRICK_LIGHT = {
-  type: 'pbr',
-  name: 'Brick (Sandstone)',
-  albedo: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg',
-  diff: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg',
-  normal: '/textures/brick/seaworn_sandstone_brick_normal.jpg'
-} as const
+// Masonry
+const MASONRY_BRICK_WHITE: MaterialChoice = { type: 'pbr', name: 'Masonry Brick White', albedo: '/textures/masonry/brick_wall_003_normal.jpg' }
 
-const MASONRY_NORMAL = {
-  type: 'pbr',
-  name: 'Masonry (Normal)',
-  diff: '/textures/masonry/brick_wall_003_diffuse_4k.jpg',
-  albedo: '/textures/masonry/brick_wall_003_diffuse_4k.jpg',
-  normal: '/textures/masonry/brick_wall_003_normal.jpg',
-} as const
+// Metal
+const METAL_CORRUGATED:     MaterialChoice = { type: 'pbr', name: 'Corrugated Metal', albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg' }
+const METAL_FACTORY:    MaterialChoice = { type: 'pbr', name: 'Metal Factory',      albedo: '/textures/metal/factory_wall_diff.jpg' }
 
-const METAL_SHEET = {
-  type: 'pbr',
-  name: 'Metal (Sheet)',
-  diff: '/textures/metal/box_profile_metal_sheet_diff.jpg',
-  albedo: '/textures/metal/box_profile_metal_sheet_diff.jpg',
-  normal: '/textures/metal/box_profile_metal_sheet_normal.jpg',
-} as const
+// Stone
+const STONE_WALL:     MaterialChoice = { type: 'pbr', name: 'Stone Wall', albedo: '/textures/stone/rustic_stone_wall_02_diff.jpg' }
 
-const METAL_CORRUGATED = {
-  type: 'pbr',
-  name: 'Metal (Corrugated)',
-  diff: '/textures/metal/corrugated_iron_02_diff_4k.jpg',
-  albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg',
-  normal: '/textures/metal/corrugated_iron_02_normal.jpg',
-} as const
+// Stucco
+const STUCCO_CONCRETE:     MaterialChoice = { type: 'pbr', name: 'Stucco Concrete', albedo: '/textures/stucco/gravel_concrete_normal.jpg' }
+const STUCCO_PLASTER:    MaterialChoice = { type: 'pbr', name: 'Stucco Plaster',      albedo: '/textures/stucco/painted_plaster_wall_normal.jpg' }
 
-const METAL_FACTORY = {
-  type: 'pbr',
-  name: 'Metal (Factory Wall)',
-  diff: '/textures/metal/factory_wall_diff.jpg',
-  albedo: '/textures/metal/factory_wall_diff.jpg',
-  normal: '/textures/metal/facgtory_wall_normal.jpg',
-} as const
-
-const STONE_WALL = {
-  type: 'pbr',
-  name: 'Stone (Rustic Wall)',
-  diff: '/textures/stone/rustic_stone_wall_02_diff.jpg',
-  albedo: '/textures/stone/rustic_stone_wall_02_diff.jpg',
-  normal: '/textures/stone/rustic_stone_wall_02_normal.jpg',
-} as const
-
-const STUCCO_CONCRETE = {
-  type: 'pbr',
-  name: 'Stucco (Gravel Concrete)',
-  diff: '/textures/stucco/gravel_concrete_diff_4k.jpg',
-  albedo: '/textures/stucco/gravel_concrete_diff_4k.jpg',
-  normal: '/textures/stucco/gravel_concrete_normal.jpg',
-} as const
-
-const STUCCO_PLASTER = {
-  type: 'pbr',
-  name: 'Stucco (Painted Plaster)',
-  diff: '/textures/stucco/painted_plaster_wall_diff_4k.jpg',
-  albedo: '/textures/stucco/painted_plaster_wall_diff_4k.jpg',
-  normal: '/textures/stucco/painted_plaster_wall_normal.jpg',
-} as const
-
-// Only provide sets for "walls" (Primary Walls) and "windows" (Base).
-// Leave the others out so they don't show any UI or change.
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:   [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE, STUCCO_PLASTER],
-  windows: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED, METAL_FACTORY, STONE_WALL, STUCCO_CONCRETE, STUCCO_PLASTER],
-  roof: [BRICK_RED, BRICK_LIGHT, MASONRY_NORMAL, METAL_SHEET, METAL_CORRUGATED],
+  walls:        [BRICK_RED, BRICK_LIGHT, MASONRY_BRICK_WHITE, STUCCO_CONCRETE, STUCCO_PLASTER, STONE_WALL],
+  base:         [BRICK_LIGHT, STUCCO_CONCRETE, STUCCO_PLASTER, STONE_WALL],
+  top_trim:     [MASONRY_BRICK_WHITE, BRICK_RED, STUCCO_CONCRETE, STUCCO_PLASTER, STONE_WALL],
+  metal_panels: [METAL_CORRUGATED, METAL_FACTORY],
+  roof:         [METAL_CORRUGATED, METAL_FACTORY],
+  awning:       [METAL_CORRUGATED, METAL_FACTORY],
+  foundation:   [BRICK_RED, BRICK_LIGHT, MASONRY_BRICK_WHITE, STUCCO_CONCRETE, STUCCO_PLASTER, STONE_WALL],
 }
 
 

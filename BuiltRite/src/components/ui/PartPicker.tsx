@@ -8,27 +8,53 @@ import { useConfigurator, type ConfigState, type MaterialChoice } from '../../st
 type Cat = 'Brick' | 'Metal' | 'Masonry' | 'Stone' | 'Stucco'
 const ALL_CATS: Cat[] = ['Brick', 'Metal', 'Masonry', 'Stone', 'Stucco']
 
+// Prefer this order if those ids exist in PARTS
+const PREFERRED_PART_ORDER = [
+  'walls',
+  'base',
+  'top_trim',
+  'metal_panels',
+  'roof',
+  'awning',
+  'foundation',
+]
+
 export default function PartPicker() {
   const selection = useConfigurator((s: ConfigState) => s.selection)
   const setSelection = useConfigurator((s: ConfigState) => s.setSelection)
 
-  const partsWithOptions = useMemo(
-    () => PARTS.filter(p => (TEXTURE_SETS[p.id]?.length ?? 0) > 0),
-    []
-  )
+  // Build the list of parts that have texture options, honoring our preferred order first
+  const partsWithOptions = useMemo(() => {
+    const hasOpts = (id: string) => (TEXTURE_SETS[id]?.length ?? 0) > 0
+    const byId = new Map(PARTS.map(p => [p.id, p]))
+    const ordered: typeof PARTS = []
+
+    // Add preferred ids that exist AND have options
+    for (const id of PREFERRED_PART_ORDER) {
+      const p = byId.get(id)
+      if (p && hasOpts(p.id)) ordered.push(p)
+    }
+    // Add any remaining parts with options that weren’t in preferred order
+    for (const p of PARTS) {
+      if (!ordered.find(o => o.id === p.id) && hasOpts(p.id)) ordered.push(p)
+    }
+    return ordered
+  }, [])
+
   const [idx, setIdx] = useState(0)
   const [activeTabByPart, setActiveTabByPart] = useState<Record<string, Cat>>({})
 
   if (!partsWithOptions.length) return null
 
-  const part = partsWithOptions[idx]
+  const part = partsWithOptions[Math.min(idx, partsWithOptions.length - 1)]
   const options = TEXTURE_SETS[part.id]!
 
   const availableCats = getAvailableCats(options)
   const defaultCat: Cat = availableCats[0] ?? 'Brick'
   const activeCat: Cat = activeTabByPart[part.id] ?? defaultCat
 
-  const shownOptions = options.filter(opt => inferCategory(opt) === activeCat)
+  const filtered = options.filter(opt => inferCategory(opt) === activeCat)
+  const shownOptions = filtered.length ? filtered : options // fallback so UI never empties
 
   const setTab = (cat: Cat) =>
     setActiveTabByPart(prev => ({ ...prev, [part.id]: cat }))
@@ -47,7 +73,7 @@ export default function PartPicker() {
         borderRadius: 12,
         boxShadow: '0 8px 28px rgba(0,0,0,0.08)',
         maxWidth: 'min(92vw, 1100px)',
-        width: 900,
+        width: 700,
       }}
     >
       {/* Part switcher */}
@@ -79,7 +105,7 @@ export default function PartPicker() {
         {part.label}
       </div>
 
-      {/* Options panel: stack tabs ABOVE swatches */}
+      {/* Options panel: tabs ABOVE swatches */}
       <div
         style={{
           display: 'flex',
@@ -119,7 +145,7 @@ export default function PartPicker() {
             const style: React.CSSProperties = {
               height: 32,
               width: 32,
-              borderRadius: 0,
+              borderRadius: 0, // square like bricks/tiles
               border: isSel ? '2px solid #111' : '1px solid #d0d0d0',
               background: opt.type === 'color' ? opt.value : '#c9cdd3',
               backgroundSize: 'cover',
@@ -234,7 +260,7 @@ function inferCategory(opt: MaterialChoice): Cat | null {
   if (s.includes('/metal/') || s.includes(' metal') || s.includes('aluminum') || s.includes('steel') || s.includes('corten') || s.includes('copper') || s.includes('zinc')) return 'Metal'
   if (s.includes('/masonry/') || s.includes('masonry') || s.includes('cement') || s.includes('block') || s.includes('cmu')) return 'Masonry'
   if (s.includes('/stone/') || s.includes('stone')) return 'Stone'
-  if (s.includes('/stucco/') || s.includes('stucco') || s.includes('concrete') || s.includes('plaster')) return 'Stucco'
+  if (s.includes('/stucco/') || s.includes('stucco') || s.includes('concrete') || s.includes('plaster') || s.includes('plastered')) return 'Stucco'
   return null
 }
 
@@ -246,6 +272,7 @@ function getAvailableCats(options: MaterialChoice[]): Cat[] {
   }
   return ALL_CATS.filter(c => present.has(c))
 }
+
 
 
 

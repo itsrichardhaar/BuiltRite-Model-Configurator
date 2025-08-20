@@ -22,6 +22,9 @@ export default function Model() {
   const { scene } = useGLTF(MODEL_URL)
   const root = useMemo(() => scene.clone(true), [scene])
 
+  // Keep track of any meshes we identified as "ground" so we don't overwrite their material later
+  const groundMeshUUIDs = useRef<Set<string>>(new Set())
+
   // default selections (first option per part)
   useEffect(() => {
     for (const part of PARTS) {
@@ -32,14 +35,55 @@ export default function Model() {
     }
   }, [selection])
 
-  // ground & shadows
+  // ground & shadows + make GLB ground shadow-only
   useEffect(() => {
+    // 1) enable cast/receive on all meshes
     root.traverse((o: any) => {
       if (o?.isMesh) { o.castShadow = true; o.receiveShadow = true }
     })
+
+    // 2) place model on ground
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
+
+    // 3) detect GLB ground mesh(es) and swap to ShadowMaterial
+    const GROUND_NAME_HINTS = ['ground', 'floor', 'plane', 'base']
+
+    root.traverse((o: any) => {
+      if (!o?.isMesh) return
+
+      const name = (o.name || '').toLowerCase()
+      const matName = (o.material?.name || '').toLowerCase()
+      const namedLikeGround =
+        GROUND_NAME_HINTS.some(h => name.includes(h)) ||
+        GROUND_NAME_HINTS.some(h => matName.includes(h))
+
+      // Heuristic: very flat in Y, reasonably wide in X/Z
+      let flatAndWide = false
+      if (o.geometry) {
+        o.geometry.computeBoundingBox?.()
+        const bb = o.geometry.boundingBox
+        if (bb) {
+          const size = new THREE.Vector3()
+          bb.getSize(size)
+          // tweak thresholds to match your scale
+          flatAndWide = size.y < 0.15 && size.x > 2 && size.z > 2
+        }
+      }
+
+      if (namedLikeGround || flatAndWide) {
+        // Mark so our material pass won’t touch it
+        groundMeshUUIDs.current.add(o.uuid)
+
+        // Make it invisible except for shadows
+        const shadowMat = new THREE.ShadowMaterial({ opacity: 0.22, transparent: true })
+        shadowMat.depthWrite = false
+        o.castShadow = false
+        o.receiveShadow = true
+        o.material = shadowMat
+      }
+    })
   }, [root])
 
   // meshName -> partId
@@ -49,10 +93,12 @@ export default function Model() {
     return map
   }, [])
 
-  // apply materials
+  // apply materials to *non-ground* meshes only
   useFrame(() => {
     root.traverse((obj: any) => {
       if (!obj?.isMesh) return
+      if (groundMeshUUIDs.current.has(obj.uuid)) return // skip GLB ground
+
       const partId = meshToPart.get(obj.name)
       if (!partId) return
       const sel = selection[partId]
@@ -87,6 +133,7 @@ export default function Model() {
 }
 
 useGLTF.preload(MODEL_URL)
+
 
 
 

@@ -12,7 +12,7 @@ export default function Viewer() {
         shadows
         camera={{ position: [0, 6, 45], fov: 45 }}
         // Option A: quick — solid background via style
-        style={{ background: '#f8f8f4' }}
+        style={{ background: '#ffffff' }}
 
         // Option B: precise — set clear color in WebGL (uncomment if you prefer)
         // onCreated={({ gl }) => {
@@ -22,10 +22,10 @@ export default function Viewer() {
         //   gl.setClearColor('#f8f8f4')
         // }}
       >
-        <ambientLight intensity={0.6} />
+        <ambientLight intensity={1} />
         <directionalLight
           position={[0, 18, 60]}
-          intensity={1.05}
+          intensity={1}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
