@@ -26,6 +26,9 @@ export default function Model() {
   const groundMeshUUIDs = useRef<Set<string>>(new Set())
   const fixedMaterialUUIDs = useRef<Set<string>>(new Set())
 
+  // footprint for the shadow plane
+  const [footprint, setFootprint] = useState<{ x: number; z: number }>({ x: 50, z: 50 })
+
   // default selections (first option per part)
   useEffect(() => {
     for (const part of PARTS) {
@@ -39,9 +42,7 @@ export default function Model() {
   // Build a case-insensitive name → partId map (we'll also check ancestors)
   const nameToPart = useMemo(() => {
     const m = new Map<string, string>()
-    for (const part of PARTS) {
-      for (const n of part.meshNames) m.set(n.toLowerCase(), part.id)
-    }
+    for (const part of PARTS) for (const n of part.meshNames) m.set(n.toLowerCase(), part.id)
     return m
   }, [])
 
@@ -62,44 +63,37 @@ export default function Model() {
       if (o?.isMesh) { o.castShadow = true; o.receiveShadow = true }
     })
 
-    // 2) place model on ground
+    // 2) place model on ground + compute footprint for shadow plane
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
+    const size = new THREE.Vector3()
+    box.getSize(size)
+    setFootprint({ x: size.x * 1.2, z: size.z * 1.2 }) // slightly larger than model
 
-    // 3) Make GLB ground shadow-only (invisible except shadows)
-    const GROUND_NAME_HINTS = ['ground']
+    // 3) Make GLB ground UNLIT WHITE (and not a shadow receiver)
+    //    so it stays pure white regardless of lighting.
+    const GROUND_NAME_HITS = ['floor_plane', 'ground'] as const
     root.traverse((o: any) => {
       if (!o?.isMesh) return
       const name = (o.name || '').toLowerCase()
       const matName = (o.material?.name || '').toLowerCase()
-      const namedLikeGround =
-        GROUND_NAME_HINTS.some(h => name.includes(h)) ||
-        GROUND_NAME_HINTS.some(h => matName.includes(h))
+      const isGround =
+        GROUND_NAME_HITS.some(h => name === h || name.includes(h)) ||
+        GROUND_NAME_HITS.some(h => matName === h || matName.includes(h))
 
-      // Heuristic: very flat & wide
-      let flatAndWide = false
-      if (o.geometry) {
-        o.geometry.computeBoundingBox?.()
-        const bb = o.geometry.boundingBox
-        if (bb) {
-          const size = new THREE.Vector3()
-          bb.getSize(size)
-          flatAndWide = size.y < 0.15 && size.x > 2 && size.z > 2
-        }
-      }
-
-      if (namedLikeGround || flatAndWide) {
+      if (isGround) {
         groundMeshUUIDs.current.add(o.uuid)
-        const shadowMat = new THREE.ShadowMaterial({ opacity: 0.22, transparent: true })
-        shadowMat.depthWrite = false
+        // Unlit white base
+        const whiteMat = new THREE.MeshBasicMaterial({ color: '#ffffff' })
+        // If multi-material, replace all with the same unlit white
+        o.material = Array.isArray(o.material) ? o.material.map(() => whiteMat) : whiteMat
         o.castShadow = false
-        o.receiveShadow = true
-        o.material = shadowMat
+        o.receiveShadow = false // shadow will be on a thin overlay plane
       }
     })
 
-    // 4) Force windows_doors to a solid color (and protect it from later overrides)
+    // 4) (optional) Force windows_doors to solid color and protect it
     const WINDOW_DOORS_COLOR = '#2f2f2f'
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -124,35 +118,26 @@ export default function Model() {
       if (groundMeshUUIDs.current.has(obj.uuid)) return
       if (fixedMaterialUUIDs.current.has(obj.uuid)) return
 
-      const partId = partIdForObject(obj) // ← matches group or mesh name
+      const partId = partIdForObject(obj)
       if (!partId) return
 
       const sel = selection[partId]
       if (!sel) return
 
       const mat = makeMaterial(sel)
-
-      if (Array.isArray(obj.material)) {
-        // Reuse the same material instance across submeshes for a uniform look
-        obj.material = obj.material.map(() => mat)
-      } else {
-        obj.material = mat
-      }
+      obj.material = Array.isArray(obj.material) ? obj.material.map(() => mat) : mat
     })
   })
 
   // eased rotation / inertia for both Y (yaw) and X (pitch)
   useFrame((_, dt) => {
     if (!group.current) return
-
-    // Y axis
     const diffY = rotationY - group.current.rotation.y
     const accelY = diffY * 10
     const newVelY = velocityY * 0.9 + accelY * dt
     setVelocityY(newVelY)
     group.current.rotation.y += newVelY * dt
 
-    // X axis
     const diffX = rotationX - group.current.rotation.x
     const accelX = diffX * 10
     const newVelX = velocityX * 0.9 + accelX * dt
@@ -162,12 +147,24 @@ export default function Model() {
 
   return (
     <group ref={group} position={[0, -1, 0]}>
+      {/* GLB */}
       <primitive object={root} />
+
+      {/* Thin shadow receiver plane just above the GLB ground */}
+      <mesh
+        rotation-x={-Math.PI / 2}
+        position={[0, 0.001, 0]} // a hair above y=0 in model space
+        receiveShadow
+      >
+        <planeGeometry args={[footprint.x, footprint.z]} />
+        <shadowMaterial color="#000" opacity={0.22} transparent />
+      </mesh>
     </group>
   )
 }
 
 useGLTF.preload(MODEL_URL)
+
 
 
 
