@@ -5,8 +5,8 @@ import { PARTS } from '../../config/parts'
 import { TEXTURE_SETS } from '../../config/textures'
 import { useConfigurator, type ConfigState, type MaterialChoice } from '../../state/useConfigurator'
 
-type Cat = 'Brick' | 'Metal' | 'Masonry' | 'Stone' | 'Stucco'
-const ALL_CATS: Cat[] = ['Brick', 'Metal', 'Masonry', 'Stone', 'Stucco']
+type Cat = 'Color' | 'Brick' | 'Metal' | 'Masonry' | 'Stone' | 'Stucco'
+const ALL_CATS: Cat[] = ['Color', 'Brick', 'Metal', 'Masonry', 'Stone', 'Stucco']
 
 // Prefer this order if those ids exist in PARTS
 const PREFERRED_PART_ORDER = [
@@ -17,6 +17,7 @@ const PREFERRED_PART_ORDER = [
   'roof',
   'awning',
   'foundation',
+  'garrage_doors'
 ]
 
 export default function PartPicker() {
@@ -249,20 +250,63 @@ function eq(a?: MaterialChoice | null, b?: MaterialChoice | null) {
 }
 
 function inferCategory(opt: MaterialChoice): Cat | null {
-  const haystacks: string[] = []
-  if (opt.type === 'pbr') {
-    haystacks.push(opt.albedo, opt.normal ?? '', opt.roughness ?? '', opt.ao ?? '')
-  } else {
-    haystacks.push(opt.name ?? '')
-  }
-  const s = haystacks.join(' ').toLowerCase()
-  if (s.includes('/brick/') || s.includes(' brick')) return 'Brick'
-  if (s.includes('/metal/') || s.includes(' metal') || s.includes('aluminum') || s.includes('steel') || s.includes('corten') || s.includes('copper') || s.includes('zinc')) return 'Metal'
-  if (s.includes('/masonry/') || s.includes('masonry') || s.includes('cement') || s.includes('block') || s.includes('cmu')) return 'Masonry'
-  if (s.includes('/stone/') || s.includes('stone')) return 'Stone'
-  if (s.includes('/stucco/') || s.includes('stucco') || s.includes('concrete') || s.includes('plaster') || s.includes('plastered')) return 'Stucco'
+  if (opt.type === 'color') return 'Color'
+
+  const text = [
+    opt.type === 'pbr' ? opt.albedo : '',
+    opt.type === 'pbr' ? opt.normal ?? '' : '',
+    opt.type === 'pbr' ? opt.roughness ?? '' : '',
+    opt.type === 'pbr' ? opt.ao ?? '' : '',
+    (opt as any).name ?? '',
+  ]
+    .join(' ')
+    .toLowerCase()
+
+  const has = (s: string) => text.includes(s)
+  const inFolder = (folder: string) =>
+    text.includes(`/${folder}/`) || text.includes(`\\${folder}\\`)
+
+  if (inFolder('brick') || has(' brick')) return 'Brick'
+
+  if (
+    inFolder('metal') ||
+    has(' metal') ||
+    has('aluminum') ||
+    has('steel') ||
+    has('galvalume') ||
+    has('corten') ||
+    has('copper') ||
+    has('zinc')
+  ) return 'Metal'
+
+  if (
+    inFolder('stone') ||
+    has(' stone') ||
+    has('limestone') ||
+    has('granite') ||
+    has('marble') ||
+    has('sandstone')
+  ) return 'Stone'
+
+  if (
+    inFolder('stucco') ||
+    has('stucco') ||
+    has('render') ||
+    has('plaster')
+  ) return 'Stucco'
+
+  if (
+    inFolder('masonry') ||
+    has('masonry') ||
+    has('concrete') ||   // move concrete here
+    has('cement') ||
+    has('cmu') ||
+    has('block')
+  ) return 'Masonry'
+
   return null
 }
+
 
 function getAvailableCats(options: MaterialChoice[]): Cat[] {
   const present = new Set<Cat>()

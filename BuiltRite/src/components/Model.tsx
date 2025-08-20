@@ -22,8 +22,9 @@ export default function Model() {
   const { scene } = useGLTF(MODEL_URL)
   const root = useMemo(() => scene.clone(true), [scene])
 
-  // Keep track of any meshes we identified as "ground" so we don't overwrite their material later
+  // Track meshes we should NEVER overwrite in the live material pass
   const groundMeshUUIDs = useRef<Set<string>>(new Set())
+  const fixedMaterialUUIDs = useRef<Set<string>>(new Set())
 
   // default selections (first option per part)
   useEffect(() => {
@@ -35,7 +36,26 @@ export default function Model() {
     }
   }, [selection])
 
-  // ground & shadows + make GLB ground shadow-only
+  // Build a case-insensitive name → partId map (we'll also check ancestors)
+  const nameToPart = useMemo(() => {
+    const m = new Map<string, string>()
+    for (const part of PARTS) {
+      for (const n of part.meshNames) m.set(n.toLowerCase(), part.id)
+    }
+    return m
+  }, [])
+
+  function partIdForObject(obj: THREE.Object3D | null): string | undefined {
+    let o: THREE.Object3D | null = obj
+    while (o) {
+      const pid = nameToPart.get((o.name || '').toLowerCase())
+      if (pid) return pid
+      o = o.parent ?? null
+    }
+    return undefined
+  }
+
+  // ground & shadows + special-case materials
   useEffect(() => {
     // 1) enable cast/receive on all meshes
     root.traverse((o: any) => {
@@ -47,19 +67,17 @@ export default function Model() {
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
 
-    // 3) detect GLB ground mesh(es) and swap to ShadowMaterial
+    // 3) Make GLB ground shadow-only (invisible except shadows)
     const GROUND_NAME_HINTS = ['ground', 'floor', 'plane', 'base']
-
     root.traverse((o: any) => {
       if (!o?.isMesh) return
-
       const name = (o.name || '').toLowerCase()
       const matName = (o.material?.name || '').toLowerCase()
       const namedLikeGround =
         GROUND_NAME_HINTS.some(h => name.includes(h)) ||
         GROUND_NAME_HINTS.some(h => matName.includes(h))
 
-      // Heuristic: very flat in Y, reasonably wide in X/Z
+      // Heuristic: very flat & wide
       let flatAndWide = false
       if (o.geometry) {
         o.geometry.computeBoundingBox?.()
@@ -67,16 +85,12 @@ export default function Model() {
         if (bb) {
           const size = new THREE.Vector3()
           bb.getSize(size)
-          // tweak thresholds to match your scale
           flatAndWide = size.y < 0.15 && size.x > 2 && size.z > 2
         }
       }
 
       if (namedLikeGround || flatAndWide) {
-        // Mark so our material pass won’t touch it
         groundMeshUUIDs.current.add(o.uuid)
-
-        // Make it invisible except for shadows
         const shadowMat = new THREE.ShadowMaterial({ opacity: 0.22, transparent: true })
         shadowMat.depthWrite = false
         o.castShadow = false
@@ -84,25 +98,46 @@ export default function Model() {
         o.material = shadowMat
       }
     })
+
+    // 4) Force windows_doors to a solid color (and protect it from later overrides)
+    const WINDOW_DOORS_COLOR = '#2f2f2f'
+    root.traverse((o: any) => {
+      if (!o?.isMesh) return
+      const name = (o.name || '').toLowerCase()
+      if (name.includes('windows_doors')) {
+        o.material = new THREE.MeshStandardMaterial({
+          color: WINDOW_DOORS_COLOR,
+          roughness: 0.8,
+          metalness: 0.1,
+        })
+        o.castShadow = true
+        o.receiveShadow = true
+        fixedMaterialUUIDs.current.add(o.uuid)
+      }
+    })
   }, [root])
 
-  // meshName -> partId
-  const meshToPart = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const part of PARTS) for (const n of part.meshNames) map.set(n, part.id)
-    return map
-  }, [])
-
-  // apply materials to *non-ground* meshes only
+  // apply materials to non-ground, non-fixed meshes (ancestor-aware, multi-material safe)
   useFrame(() => {
     root.traverse((obj: any) => {
       if (!obj?.isMesh) return
-      if (groundMeshUUIDs.current.has(obj.uuid)) return // skip GLB ground
+      if (groundMeshUUIDs.current.has(obj.uuid)) return
+      if (fixedMaterialUUIDs.current.has(obj.uuid)) return
 
-      const partId = meshToPart.get(obj.name)
+      const partId = partIdForObject(obj) // ← matches group or mesh name
       if (!partId) return
+
       const sel = selection[partId]
-      if (sel) obj.material = makeMaterial(sel)
+      if (!sel) return
+
+      const mat = makeMaterial(sel)
+
+      if (Array.isArray(obj.material)) {
+        // Reuse the same material instance across submeshes for a uniform look
+        obj.material = obj.material.map(() => mat)
+      } else {
+        obj.material = mat
+      }
     })
   })
 
@@ -133,6 +168,7 @@ export default function Model() {
 }
 
 useGLTF.preload(MODEL_URL)
+
 
 
 
