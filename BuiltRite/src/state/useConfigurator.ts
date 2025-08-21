@@ -9,10 +9,24 @@ export type ColorChoice = {
 export type PBRChoice = {
   type: 'pbr'
   name: string
-  albedo: string
+  albedo?: string
   normal?: string
   roughness?: string
   ao?: string
+  metalnessMap?: string
+  // --- optional per-texture overrides ---
+  params?: {
+    roughness?: number                // 0..1 (multiplies roughnessMap if present)
+    metalness?: number                // 0..1 (multiplies metalnessMap if used)
+    normalScale?: number | [number, number]
+    aoIntensity?: number              // default 1.0
+    displacementScale?: number        // if you ever use displacementMap
+    displacementBias?: number
+    envMapIntensity?: number
+    repeat?: [number, number]         // apply same tiling across all maps
+    offset?: [number, number]         // apply same offset across all maps
+    rotation?: number                 // radians, if you need it
+  }
 }
 
 export type MaterialChoice = ColorChoice | PBRChoice

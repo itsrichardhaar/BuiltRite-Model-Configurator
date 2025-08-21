@@ -22,14 +22,14 @@ export default function Model() {
   const { scene } = useGLTF(MODEL_URL)
   const root = useMemo(() => scene.clone(true), [scene])
 
-  // Track meshes we should NEVER overwrite in the live material pass
+  // Do-not-touch sets
   const groundMeshUUIDs = useRef<Set<string>>(new Set())
   const fixedMaterialUUIDs = useRef<Set<string>>(new Set())
 
-  // footprint for the shadow plane
+  // Size for the shadow receiver (no mask involved)
   const [footprint, setFootprint] = useState<{ x: number; z: number }>({ x: 50, z: 50 })
 
-  // default selections (first option per part)
+  // Default selections
   useEffect(() => {
     for (const part of PARTS) {
       if (!selection[part.id]) {
@@ -39,7 +39,7 @@ export default function Model() {
     }
   }, [selection])
 
-  // Build a case-insensitive name → partId map (we'll also check ancestors)
+  // Name -> part mapping (checks ancestors too)
   const nameToPart = useMemo(() => {
     const m = new Map<string, string>()
     for (const part of PARTS) for (const n of part.meshNames) m.set(n.toLowerCase(), part.id)
@@ -56,23 +56,20 @@ export default function Model() {
     return undefined
   }
 
-  // ground & shadows + special-case materials
+  // Ground, shadows, and special-case materials
   useEffect(() => {
-    // 1) enable cast/receive on all meshes
-    root.traverse((o: any) => {
-      if (o?.isMesh) { o.castShadow = true; o.receiveShadow = true }
-    })
+    // enable cast/receive on all meshes
+    root.traverse((o: any) => { if (o?.isMesh) { o.castShadow = true; o.receiveShadow = true } })
 
-    // 2) place model on ground + compute footprint for shadow plane
+    // place model on ground & compute size for shadow plane
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
     const size = new THREE.Vector3()
     box.getSize(size)
-    setFootprint({ x: size.x * 1.2, z: size.z * 1.2 }) // slightly larger than model
+    setFootprint({ x: size.x * 1.2, z: size.z * 1.2 })
 
-    // 3) Make GLB ground UNLIT WHITE (and not a shadow receiver)
-    //    so it stays pure white regardless of lighting.
+    // Make GLB ground UNLIT WHITE (pure white, unaffected by lights)
     const GROUND_NAME_HITS = ['floor_plane', 'ground'] as const
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -81,19 +78,16 @@ export default function Model() {
       const isGround =
         GROUND_NAME_HITS.some(h => name === h || name.includes(h)) ||
         GROUND_NAME_HITS.some(h => matName === h || matName.includes(h))
-
       if (isGround) {
         groundMeshUUIDs.current.add(o.uuid)
-        // Unlit white base
         const whiteMat = new THREE.MeshBasicMaterial({ color: '#ffffff' })
-        // If multi-material, replace all with the same unlit white
         o.material = Array.isArray(o.material) ? o.material.map(() => whiteMat) : whiteMat
         o.castShadow = false
-        o.receiveShadow = false // shadow will be on a thin overlay plane
+        o.receiveShadow = false
       }
     })
 
-    // 4) (optional) Force windows_doors to solid color and protect it
+    // Keep windows_doors a fixed solid color
     const WINDOW_DOORS_COLOR = '#2f2f2f'
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -111,7 +105,7 @@ export default function Model() {
     })
   }, [root])
 
-  // apply materials to non-ground, non-fixed meshes (ancestor-aware, multi-material safe)
+  // Live material pass (skip protected meshes)
   useFrame(() => {
     root.traverse((obj: any) => {
       if (!obj?.isMesh) return
@@ -129,18 +123,16 @@ export default function Model() {
     })
   })
 
-  // eased rotation / inertia for both Y (yaw) and X (pitch)
+  // eased rotation / inertia
   useFrame((_, dt) => {
     if (!group.current) return
     const diffY = rotationY - group.current.rotation.y
-    const accelY = diffY * 10
-    const newVelY = velocityY * 0.9 + accelY * dt
+    const newVelY = velocityY * 0.9 + diffY * 10 * dt
     setVelocityY(newVelY)
     group.current.rotation.y += newVelY * dt
 
     const diffX = rotationX - group.current.rotation.x
-    const accelX = diffX * 10
-    const newVelX = velocityX * 0.9 + accelX * dt
+    const newVelX = velocityX * 0.9 + diffX * 10 * dt
     setVelocityX(newVelX)
     group.current.rotation.x += newVelX * dt
   })
@@ -150,20 +142,17 @@ export default function Model() {
       {/* GLB */}
       <primitive object={root} />
 
-      {/* Thin shadow receiver plane just above the GLB ground */}
-      <mesh
-        rotation-x={-Math.PI / 2}
-        position={[0, 0.001, 0]} // a hair above y=0 in model space
-        receiveShadow
-      >
+      {/* Shadow receiver plane (no mask) */}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.001, 0]} receiveShadow>
         <planeGeometry args={[footprint.x, footprint.z]} />
-        <shadowMaterial color="#000" opacity={0.22} transparent />
+        <shadowMaterial color="#000" opacity={0.28} transparent />
       </mesh>
     </group>
   )
 }
 
 useGLTF.preload(MODEL_URL)
+
 
 
 

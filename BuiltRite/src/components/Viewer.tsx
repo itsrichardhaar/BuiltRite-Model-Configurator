@@ -30,7 +30,7 @@ export default function Viewer() {
           gl.shadowMap.type = THREE.PCFSoftShadowMap
         }}
       >
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={1} />
 
         {/* Key light "rotated" by azimuth/elevation */}
         <directionalLight
@@ -53,6 +53,52 @@ export default function Viewer() {
 
         {/* Optional fill that doesn’t affect shadow size */}
         {/* <directionalLight position={[0, 18, 60]} intensity={0.6} castShadow={false} /> */}
+        {/* Ground with horizon fade */}
+{/* Ground with horizon fade (robust version) */}
+<mesh rotation-x={-Math.PI / 2} position={[0, -0.02, 0]} receiveShadow>
+  <planeGeometry args={[1200, 1200]} />
+  <meshStandardMaterial
+    color="#dfe3e9"
+    transparent
+    alphaTest={0.02}        // <- important: let Three do early discard
+    polygonOffset            // <- slight depth bias for the ground
+    polygonOffsetUnits={1}
+    polygonOffsetFactor={1}
+    onBeforeCompile={(shader) => {
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', `
+          #include <common>
+          varying float vDistXZ;
+        `)
+        .replace('#include <worldpos_vertex>', `
+          #include <worldpos_vertex>
+          vDistXZ = length(worldPosition.xz);
+        `);
+
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', `
+          #include <common>
+          varying float vDistXZ;
+        `)
+        .replace('void main() {', `
+          void main() {
+            float fadeStart = 40.0;
+            float fadeEnd   = 90.0;
+            float fade = 1.0 - smoothstep(fadeStart, fadeEnd, vDistXZ);
+
+            // Hard kill ultra-thin fragments (stops shadow shimmer)
+            if (fade < 0.02) discard;
+        `)
+        .replace('#include <opaque_fragment>', `
+          #include <opaque_fragment>
+          diffuseColor.a *= fade;
+          // alphatest runs after this via material.alphaTest
+        `);
+    }}
+  />
+</mesh>
+
+
 
         <Model />
 
