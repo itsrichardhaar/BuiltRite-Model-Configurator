@@ -1,3 +1,4 @@
+// src/components/Model.tsx
 import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
@@ -58,10 +59,33 @@ export default function Model() {
 
   // Ground, shadows, and special-case materials
   useEffect(() => {
-    // enable cast/receive on all meshes
-    root.traverse((o: any) => { if (o?.isMesh) { o.castShadow = true; o.receiveShadow = true } })
+    if (!root) return
 
-    // place model on ground & compute size for shadow plane
+    // Enable cast/receive on all meshes + material hygiene
+    root.traverse((o: any) => {
+      if (!o?.isMesh) return
+
+      o.castShadow = true
+      o.receiveShadow = true
+
+      // Force uv2 for AO if missing
+      if (o.geometry && !o.geometry.attributes.uv2 && o.geometry.attributes.uv) {
+        o.geometry.setAttribute('uv2', o.geometry.attributes.uv)
+      }
+
+      // Per-material fixes
+      const mat = o.material as THREE.Material | THREE.Material[] | undefined
+      const mats = Array.isArray(mat) ? mat : mat ? [mat] : []
+      for (const m of mats) {
+        if ('side' in m) (m as any).side = THREE.FrontSide
+        if ('shadowSide' in m) (m as any).shadowSide = THREE.FrontSide // key stabilizer
+        if ('transparent' in m && (m as any).transparent) {
+          o.receiveShadow = false // glass etc. shouldn't receive shadows
+        }
+      }
+    })
+
+    // Place model on ground & compute size for shadow plane
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
@@ -69,7 +93,7 @@ export default function Model() {
     box.getSize(size)
     setFootprint({ x: size.x * 1.2, z: size.z * 1.2 })
 
-    // Make GLB ground UNLIT WHITE (pure white, unaffected by lights)
+    // Make GLB "ground" meshes unlit & NOT part of shadow pipeline
     const GROUND_NAME_HITS = ['floor_plane', 'ground'] as const
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -142,8 +166,8 @@ export default function Model() {
       {/* GLB */}
       <primitive object={root} />
 
-      {/* Shadow receiver plane (no mask) */}
-      <mesh rotation-x={-Math.PI / 2} position={[0, 0.001, 0]} receiveShadow>
+      {/* Single shadow receiver plane (slightly lifted to avoid z-fighting) */}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.005, 0]} receiveShadow>
         <planeGeometry args={[footprint.x, footprint.z]} />
         <shadowMaterial color="#000" opacity={0.28} transparent />
       </mesh>
@@ -152,6 +176,8 @@ export default function Model() {
 }
 
 useGLTF.preload(MODEL_URL)
+
+
 
 
 

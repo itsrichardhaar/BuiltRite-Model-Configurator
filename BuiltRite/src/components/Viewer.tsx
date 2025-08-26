@@ -7,17 +7,17 @@ import RotateControls from './ui/RotationControls'
 import PartPicker from './ui/PartPicker'
 
 export default function Viewer() {
-  // ---- tweak these like "rotation" knobs ----
-  const AZIMUTH_DEG = 35;   // 0 = +X (right), 90 = +Z (front), 180 = -X, 270 = -Z
-  const ELEVATION_DEG = 60; // 0 = horizon, 90 = straight down (1:1 shadow scale)
-  const DIST = 100;         // distance from origin (any value; direction is what matters)
+  // ---- "Sun" direction knobs ----
+  const AZIMUTH_DEG = 35;   // 0 = +X, 90 = +Z
+  const ELEVATION_DEG = 60; // 0 = horizon, 90 = straight down
+  const DIST = 100;
 
   // Convert spherical → Cartesian
-  const phi = THREE.MathUtils.degToRad(90 - ELEVATION_DEG); // polar
-  const theta = THREE.MathUtils.degToRad(AZIMUTH_DEG);      // azimuth
-  const lx = DIST * Math.sin(phi) * Math.cos(theta)
-  const ly = DIST * Math.cos(phi)
-  const lz = DIST * Math.sin(phi) * Math.sin(theta)
+  const phi = THREE.MathUtils.degToRad(90 - ELEVATION_DEG);
+  const theta = THREE.MathUtils.degToRad(AZIMUTH_DEG);
+  const lx = DIST * Math.sin(phi) * Math.cos(theta);
+  const ly = DIST * Math.cos(phi);
+  const lz = DIST * Math.sin(phi) * Math.sin(theta);
 
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
@@ -28,36 +28,51 @@ export default function Viewer() {
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
+          // If shimmer persists, try VSM (uncomment):
+          // gl.shadowMap.type = THREE.VSMShadowMap
         }}
       >
-        <ambientLight intensity={1} />
+        {/* Softer ambient to keep contrast in shadows */}
+        <ambientLight intensity={0.7} />
 
-        {/* Key light "rotated" by azimuth/elevation */}
+        {/* Key directional light (casts shadow) */}
         <directionalLight
           position={[lx, ly, lz]}
-          // aim at the model origin
-          target-position={[0, 0, 0]}     // <— three-fiber sugar to set light.target.position
+          target-position={[0, 0, 0]}
           intensity={1.25}
           castShadow
+
+          // High-res shadow map
           shadow-mapSize-width={4096}
           shadow-mapSize-height={4096}
-          shadow-camera-near={1}
-          shadow-camera-far={200}
-          shadow-camera-left={-80}
-          shadow-camera-right={80}
-          shadow-camera-top={80}
-          shadow-camera-bottom={-80}
-          shadow-bias={-0.0005}
-          shadow-normalBias={0.03}
+
+          // Tighter orthographic shadow camera around the model
+          shadow-camera-near={10}
+          shadow-camera-far={160}
+          shadow-camera-left={-35}
+          shadow-camera-right={35}
+          shadow-camera-top={35}
+          shadow-camera-bottom={-35}
+
+          // Bias tuning (gentle values reduce shimmer without floating shadows)
+          shadow-bias={-0.00015}
+          shadow-normalBias={0.02}
+
+          // Small kernel blur for PCF
+          shadow-radius={2}
         />
 
-        {/* Optional fill that doesn’t affect shadow size */}
-        {/* <directionalLight position={[0, 18, 60]} intensity={0.6} castShadow={false} /> */}
-        {/* Ground with horizon fade */}
-{/* Ground with horizon fade (robust version) */}
+        {/* If you want a non-shadowing fill: */}
+        {/* <directionalLight position={[0, 18, 60]} intensity={0.5} castShadow={false} /> */}
+
         <Model />
 
-        <OrbitControls enablePan={false} minDistance={30} maxDistance={124} target={[0, 0, 0]} />
+        <OrbitControls
+          enablePan={false}
+          minDistance={30}
+          maxDistance={124}
+          target={[0, 0, 0]}
+        />
       </Canvas>
 
       {/* UI overlays unchanged */}
@@ -73,6 +88,7 @@ export default function Viewer() {
     </div>
   )
 }
+
 
 
 
