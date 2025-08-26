@@ -7,7 +7,7 @@ export const PARTS: Part[] = [
   { id: 'metal_panels',  label: 'Metal Panels',  meshNames: ['Object_05'] },
   { id: 'awning',        label: 'Awning',        meshNames: ['Awning'] },
   { id: 'windows_doors', label: 'Windows & Doors', meshNames: ['windows_doors'] },
-  { id: 'garage_doors', label: 'Garage Doors',  meshNames: ['garrage_doors'] }
+  { id: 'garage_doors', label: 'Roll Up Doors',  meshNames: ['garrage_doors'] }
   
   // Deliberately excluding multi-material meshes to avoid breaking glass:
   // windows_doors (frame + glass), garrage_doors (two materials), fecad_corner (mixed)

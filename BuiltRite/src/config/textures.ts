@@ -223,13 +223,15 @@ const METAL_BRIGHT_WHITE: MaterialChoice = {
   name: 'Metal Bright White', 
   albedo: '/textures/metal/bright-white/Metal_Cavity.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
+  roughness: '/textures/metal/ash-gray/Metal_Roughness.webp',
+  ao: 'BuiltRite/public/textures/metal/ash-gray/Metal_AO.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.05,
-    normalScale: 1.0,
-    bumpScale: 0.02,
-    aoIntensity: 0.95,
-    specularIntensity: 0.25,
+    normalScale: 0.8,
+    bumpScale: 0.01,
+    aoIntensity: 0.9,
+    specularIntensity: 0.3,
   },
 }
 
