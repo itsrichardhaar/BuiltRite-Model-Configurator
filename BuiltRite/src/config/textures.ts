@@ -36,6 +36,13 @@ const MASONRY_DARK_BRICK: MaterialChoice = {
   normal: '/textures/masonry/dark-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp'
 }
 
+const MASONRY_BRIGHT_BRICK: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Bright Brick Wall', 
+  albedo: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
+  normal: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp'
+}
+
 // Metal
 const METAL_CORRUGATED:     MaterialChoice = { type: 'pbr', name: 'Corrugated Metal', albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg' }
 const METAL_FACTORY:    MaterialChoice = { type: 'pbr', name: 'Metal Factory',      albedo: '/textures/metal/factory_wall_diff.jpg' }
@@ -62,9 +69,9 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK],
-  base:         [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK],
-  top_trim:     [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK],
+  walls:        [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK],
+  base:         [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK],
+  top_trim:     [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK],
   metal_panels: [METAL_CORRUGATED, METAL_FACTORY],
   roof:         [METAL_CORRUGATED, METAL_FACTORY],
   awning:       [METAL_CORRUGATED, METAL_FACTORY, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
