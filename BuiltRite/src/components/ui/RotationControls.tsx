@@ -17,7 +17,7 @@ export default function RotateControls() {
   }, [rotateBy, rotateXBy])
 
   return (
-    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexDirection: 'column' }}>
+    <div style={{ display: 'none', gap: 8, alignItems: 'center', flexDirection: 'column' }}>
       {/* Vertical controls */}
       <button onClick={() => rotateXBy(Math.PI / 8)} title="Rotate Up">▲</button>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
