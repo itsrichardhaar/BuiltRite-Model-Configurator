@@ -33,7 +33,7 @@ export default function Viewer() {
         }}
       >
         {/* Softer ambient to keep contrast in shadows */}
-        <ambientLight intensity={0.7} />
+        <ambientLight intensity={0.9} />
 
         {/* Key directional light (casts shadow) */}
         <directionalLight
