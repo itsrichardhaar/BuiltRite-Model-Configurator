@@ -5,9 +5,7 @@ export const PARTS: Part[] = [
   { id: 'base',          label: 'Base',          meshNames: ['Object_03'] },
   { id: 'top_trim',      label: 'Top Trim',      meshNames: ['Object_02', 'Object_04'] },
   { id: 'metal_panels',  label: 'Metal Panels',  meshNames: ['Object_05'] },
-  { id: 'roof',          label: 'Roof',          meshNames: ['roof_pieces'] },
   { id: 'awning',        label: 'Awning',        meshNames: ['Awning'] },
-  { id: 'foundation',    label: 'Foundation',    meshNames: ['Foundation'] },
   { id: 'windows_doors', label: 'Windows & Doors', meshNames: ['windows_doors'] },
   { id: 'garage_doors', label: 'Garage Doors',  meshNames: ['garrage_doors'] }
   

@@ -5,8 +5,8 @@ import { PARTS } from '../../config/parts'
 import { TEXTURE_SETS } from '../../config/textures'
 import { useConfigurator, type ConfigState, type MaterialChoice } from '../../state/useConfigurator'
 
-type Cat = 'Color' | 'Brick' | 'Metal' | 'Masonry' | 'Stone' | 'Stucco'
-const ALL_CATS: Cat[] = ['Color', 'Brick', 'Metal', 'Masonry', 'Stone', 'Stucco']
+type Cat = 'Color' | 'Masonry' | 'Metal' | 'Stone' | 'Stucco'
+const ALL_CATS: Cat[] = ['Color', 'Masonry', 'Stone', 'Stucco', 'Metal']
 
 // Prefer this order if those ids exist in PARTS
 const PREFERRED_PART_ORDER = [
@@ -14,9 +14,7 @@ const PREFERRED_PART_ORDER = [
   'base',
   'top_trim',
   'metal_panels',
-  'roof',
   'awning',
-  'foundation',
   'garrage_doors'
 ]
 
@@ -266,7 +264,7 @@ function inferCategory(opt: MaterialChoice): Cat | null {
   const inFolder = (folder: string) =>
     text.includes(`/${folder}/`) || text.includes(`\\${folder}\\`)
 
-  if (inFolder('brick') || has(' brick')) return 'Brick'
+  if (inFolder('brick') || has(' brick')) return 'Masonry'
 
   if (
     inFolder('metal') ||
@@ -298,6 +296,7 @@ function inferCategory(opt: MaterialChoice): Cat | null {
   if (
     inFolder('masonry') ||
     has('masonry') ||
+    has('brick') ||
     has('concrete') ||   // move concrete here
     has('cement') ||
     has('cmu') ||
