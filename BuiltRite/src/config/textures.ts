@@ -49,8 +49,8 @@ const MASONRY_LIGHT_GRAY_BRICK: MaterialChoice = {
 const MASONRY_GRAY_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Gray Brick Wall', 
-  albedo: '/textures/masonry/gray-brick/Gray_Brick_Wall_ucnfejocw_4K_BaseColor.webp',
-  normal: '/textures/masonry/gray-brick/Gray_Brick_Wall_ucnfejocw_4K_Normal.webp',
+  albedo: '/textures/masonry/gray-brick/Gray_Brick_BaseColor.webp',
+  normal: '/textures/masonry/gray-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp',
   params: {
     roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.0,
@@ -112,8 +112,8 @@ const MASONRY_BEIGE_BRICK: MaterialChoice = {
 const METAL_RUSTIC_RED: MaterialChoice = { 
   type: 'pbr', 
   name: 'Metal Rustic Red', 
-  albedo: '/textures/metal/rustic-red/box_profile_metal_sheet_diff.jpg',
-  normal: '/textures/metal/rustic-red/box_profile_metal_sheet_normal.jpg',
+  albedo: '/textures/metal/rustic-red/Metal_Rustic_Red.webp',
+  normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.05,
