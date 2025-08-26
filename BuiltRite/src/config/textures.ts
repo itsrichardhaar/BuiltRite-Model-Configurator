@@ -61,6 +61,20 @@ const STONE_WALL:     MaterialChoice = { type: 'pbr', name: 'Stone Wall', albedo
 const STUCCO_CONCRETE:     MaterialChoice = { type: 'pbr', name: 'Stucco Concrete', albedo: '/textures/stucco/gravel_concrete_diff_4k.jpg' }
 const STUCCO_PLASTER:    MaterialChoice = { type: 'pbr', name: 'Stucco Plaster',      albedo: '/textures/stucco/painted_plaster_wall_diff_4k.jpg' }
 
+const STUCCO_WALL_YELLOW_TAN: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Stucco Wall Yellow Tan', 
+  albedo: '/textures/stucco/yellow-tan/Stucco_Wall_ve4meimcw_4K_BaseColor.webp',
+  normal: '/textures/stucco/yellow-tan/Stucco_Wall_ve4meimcw_4K_Normal.webp'
+}
+
+const STUCCO_WALL_LIGHT_GRAY: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Stucco Wall Light Gray', 
+  albedo: '/textures/stucco/light-gray/painted_plaster_wall_diff_4k.jpg',
+  normal: '/textures/stucco/light-gray/painted_plaster_wall_normal.jpg'
+}
+
 // Garage Doors
 const GARAGE_CORRUGATED: MaterialChoice = { type: 'pbr', name: 'Corrugated Metal', albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg'}
 const GARAGE_WHITE: MaterialChoice = { type: 'color', name: 'White',       value: '#ffffff' }
@@ -76,9 +90,9 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK],
-  base:         [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK],
-  top_trim:     [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK],
+  walls:        [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY],
+  base:         [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY],
+  top_trim:     [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY],
   metal_panels: [METAL_CORRUGATED, METAL_FACTORY],
   roof:         [METAL_CORRUGATED, METAL_FACTORY],
   awning:       [METAL_CORRUGATED, METAL_FACTORY, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
