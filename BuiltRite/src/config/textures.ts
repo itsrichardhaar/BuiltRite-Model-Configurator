@@ -109,10 +109,86 @@ const MASONRY_BEIGE_BRICK: MaterialChoice = {
 }
 
 // Metal
+const METAL_SCARLET_RED: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Metal Scarlet Red', 
+  albedo: '/textures/metal/scarlat-red/Metal_Scarlet_Red.webp',
+  normal: '/textures/metal/ash-gray/Metal_Normal.webp',
+  params: {
+    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+
 const METAL_RUSTIC_RED: MaterialChoice = { 
   type: 'pbr', 
   name: 'Metal Rustic Red', 
   albedo: '/textures/metal/rustic-red/Metal_Rustic_Red.webp',
+  normal: '/textures/metal/ash-gray/Metal_Normal.webp',
+  params: {
+    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+const METAL_COBALT_BLUE: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Metal Cobalt Blue', 
+  albedo: '/textures/metal/cobalt-blue/Metal_Cobalt.webp',
+  normal: '/textures/metal/ash-gray/Metal_Normal.webp',
+  params: {
+    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+const METAL_EVERGREEN: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Metal Evergreen', 
+  albedo: '/textures/metal/evergreen/Metal_Evergreen.webp',
+  normal: '/textures/metal/ash-gray/Metal_Normal.webp',
+  params: {
+    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+const METAL_LIGHT_STONE: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Metal Light Stone', 
+  albedo: '/textures/metal/light-stone/Metal_Light_Stone.webp',
+  normal: '/textures/metal/ash-gray/Metal_Normal.webp',
+  params: {
+    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+const METAL_SADDLE_TAN: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Metal Saddle Tan', 
+  albedo: '/textures/metal/saddle-tan/Metal_Saddle_Tan.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
@@ -218,9 +294,9 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_DARK_BLUE, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_RUSTIC_RED],
-  base:         [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_RUSTIC_RED],
-  top_trim:     [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_RUSTIC_RED],
+  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_DARK_BLUE, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN],
+  base:         [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN],
+  top_trim:     [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN],
   metal_panels: [METAL_RUSTIC_RED],
   roof:         [METAL_RUSTIC_RED],
   awning:       [METAL_RUSTIC_RED, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
