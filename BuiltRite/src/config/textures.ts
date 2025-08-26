@@ -10,7 +10,7 @@ const MASONRY_TAN_BRICK: MaterialChoice = {
   normal: '/textures/masonry/tan-brick/Tan_Brick_Normal.webp',
   roughness: '/textures/masonry/tan-brick/Tan_Brick_Roughness.webp',
    params: {
-    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 1.0,        
     metalness: 0.0,
     normalScale: 1.0,
     bumpScale: 0.04,
@@ -25,7 +25,7 @@ const MASONRY_LIGHT_GRAY_BRICK: MaterialChoice = {
   albedo: '/textures/masonry/light-gray-brick/Light_Gray_Brick_BaseColor.webp',
   normal: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Normal.webp',
    params: {
-    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 1.0,        
     metalness: 0.0,
     normalScale: 1.0,
     bumpScale: 0.04,
@@ -40,7 +40,7 @@ const MASONRY_GRAY_BRICK: MaterialChoice = {
   albedo: '/textures/masonry/gray-brick/Gray_Brick_BaseColor.webp',
   normal: '/textures/masonry/gray-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp',
   params: {
-    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 1.0,        
     metalness: 0.0,
     normalScale: 1.0,
     bumpScale: 0.04,
@@ -55,7 +55,7 @@ const MASONRY_DARK_RED_BRICK: MaterialChoice = {
   albedo: '/textures/masonry/dark-red-brick/red_brick_diff_4k.jpg',
   normal: '/textures/masonry/dark-red-brick/red_brick_diff_4k.jpg',
   params: {
-    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 1.0,       
     metalness: 0.0,
     normalScale: 1.0,
     bumpScale: 0.04,
@@ -70,7 +70,7 @@ const MASONRY_BRIGHT_BRICK: MaterialChoice = {
   albedo: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
   normal: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
   params: {
-    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 1.0,      
     metalness: 0.0,
     normalScale: 1.0,
     bumpScale: 0.04,
@@ -87,7 +87,7 @@ const MASONRY_BEIGE_BRICK: MaterialChoice = {
   roughness: '/textures/masonry/beige-brick/Beige_Brick_Facade_uc0ndcifw_4K_Roughness.webp',
   bump: '/textures/masonry/beige-brick/Beige_Brick_Facade_uc0ndcifw_4K_Bump.webp',
   params: {
-    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 1.0,        
     metalness: 0.0,
     normalScale: 1.0,
     bumpScale: 0.04,
@@ -103,7 +103,7 @@ const METAL_SCARLET_RED: MaterialChoice = {
   albedo: '/textures/metal/scarlat-red/Metal_Scarlet_Red.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -119,7 +119,7 @@ const METAL_RUSTIC_RED: MaterialChoice = {
   albedo: '/textures/metal/rustic-red/Metal_Rustic_Red.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -134,7 +134,7 @@ const METAL_COBALT_BLUE: MaterialChoice = {
   albedo: '/textures/metal/cobalt-blue/Metal_Cobalt.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -149,7 +149,7 @@ const METAL_EVERGREEN: MaterialChoice = {
   albedo: '/textures/metal/evergreen/Metal_Evergreen.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -164,7 +164,7 @@ const METAL_LIGHT_STONE: MaterialChoice = {
   albedo: '/textures/metal/light-stone/Metal_Light_Stone.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -179,7 +179,7 @@ const METAL_SADDLE_TAN: MaterialChoice = {
   albedo: '/textures/metal/saddle-tan/Metal_Saddle_Tan.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -194,7 +194,7 @@ const METAL_COFFEE_BROWN: MaterialChoice = {
   albedo: '/textures/metal/coffee-brown/Metal_Coffee_Brown.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,       
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -209,7 +209,7 @@ const METAL_TRUE_BLACK: MaterialChoice = {
   albedo: '/textures/metal/true-black/Metal_True_Black.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -226,7 +226,7 @@ const METAL_BRIGHT_WHITE: MaterialChoice = {
   roughness: '/textures/metal/ash-gray/Metal_Roughness.webp',
   ao: 'BuiltRite/public/textures/metal/ash-gray/Metal_AO.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 0.8,
     bumpScale: 0.01,
@@ -241,7 +241,7 @@ const METAL_CHARCOAL_GRAY: MaterialChoice = {
   albedo: '/textures/metal/charcoal-gray/Metal_Charcoal_Gray.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -256,7 +256,7 @@ const METAL_ASHE_GRAY: MaterialChoice = {
   albedo: '/textures/metal/ash-gray/Metal_Ashe_Gray.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -272,7 +272,7 @@ const STONE_GRAY: MaterialChoice = {
   name: 'Stone Gray', 
   albedo: '/textures/stone/gray/Stone_Gray.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -286,7 +286,7 @@ const STONE_WHITE: MaterialChoice = {
   name: 'Stone White', 
   albedo: '/textures/stone/white/Stone_White.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -300,7 +300,7 @@ const STONE_TAN: MaterialChoice = {
   name: 'Stone Tan', 
   albedo: '/textures/stone/tan/Stone_Tan.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,       
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -317,7 +317,7 @@ const STUCCO_WALL_DARK_BLUE: MaterialChoice = {
   normal: '/textures/stucco/dark-blue/EIFS_Normal.webp',
   roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -333,7 +333,7 @@ const STUCCO_WALL_DARK_GRAY: MaterialChoice = {
   normal: '/textures/stucco/dark-blue/EIFS_Normal.webp',
   roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -350,7 +350,7 @@ const STUCCO_WALL_YELLOW_TAN: MaterialChoice = {
   normal: '/textures/stucco/yellow-tan/Stucco_Wall_ve4meimcw_4K_Normal.webp',
   roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
@@ -366,7 +366,7 @@ const STUCCO_WALL_WHITE: MaterialChoice = {
   normal: '/textures/stucco/yellow-tan/Stucco_Wall_ve4meimcw_4K_Normal.webp',
   roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
-    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    roughness: 0.55,        
     metalness: 0.05,
     normalScale: 1.0,
     bumpScale: 0.02,
