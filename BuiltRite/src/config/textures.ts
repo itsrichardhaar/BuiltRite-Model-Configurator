@@ -136,6 +136,7 @@ const STUCCO_WALL_DARK_BLUE: MaterialChoice = {
   name: 'Stucco Wall Dark Blue', 
   albedo: '/textures/stucco/dark-blue/EIFS_Dark_Blue.webp',
   normal: '/textures/stucco/dark-blue/EIFS_Normal.webp',
+  roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.05,
@@ -151,6 +152,7 @@ const STUCCO_WALL_DARK_GRAY: MaterialChoice = {
   name: 'Stucco Wall Dark GRAY', 
   albedo: '/textures/stucco/dark-blue/EIFS_Dark_Blue.webp',
   normal: '/textures/stucco/dark-blue/EIFS_Normal.webp',
+  roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.05,
@@ -167,6 +169,7 @@ const STUCCO_WALL_YELLOW_TAN: MaterialChoice = {
   name: 'Stucco Wall Yellow Tan', 
   albedo: '/textures/stucco/yellow-tan/EIFS_Yellow_Tan.webp',
   normal: '/textures/stucco/yellow-tan/Stucco_Wall_ve4meimcw_4K_Normal.webp',
+  roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.05,
@@ -182,6 +185,7 @@ const STUCCO_WALL_WHITE: MaterialChoice = {
   name: 'Stucco Wall White', 
   albedo: '/textures/stucco/white/EIFS_White.webp',
   normal: '/textures/stucco/yellow-tan/Stucco_Wall_ve4meimcw_4K_Normal.webp',
+  roughness: '/textures/stucco/dark-blue/EIFS_Roughness.webp',
   params: {
     roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.05,
