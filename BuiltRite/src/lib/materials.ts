@@ -10,49 +10,82 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   const t = loader.load(url)
   t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.anisotropy = 8
-  // Albedo/baseColor should be sRGB; others (normal/roughness/ao) stay linear
-  if (isColorMap) {
-    // three r152+: use colorSpace; older versions use encoding = sRGBEncoding
-    ;(t as any).colorSpace = (THREE as any).SRGBColorSpace ?? undefined
-  }
+  if (isColorMap) (t as any).colorSpace = (THREE as any).SRGBColorSpace ?? undefined
   cache.set(url, t)
   return t
 }
 
-export function makeMaterial(choice: MaterialChoice): THREE.MeshStandardMaterial {
-  const mat = new THREE.MeshStandardMaterial({ color: '#ffffff' })
-
+export function makeMaterial(choice: MaterialChoice): THREE.Material {
   if (choice.type === 'color') {
-    mat.color = new THREE.Color(choice.value)
+    const mat = new THREE.MeshStandardMaterial({ color: choice.value })
+    mat.roughness = 0.9
+    mat.metalness = 0.0
     mat.map = null
     mat.normalMap = null
     mat.roughnessMap = null
     mat.aoMap = null
-    mat.roughness = 0.9
-    mat.metalness = 0.0
     return mat
   }
 
   const p = choice as PBRChoice
+  const usePhysical = !!p.specular // prefer physical when specular workflow provided
 
-  const map        = getTex(p.albedo, true)
+  const albedo     = getTex(p.albedo, true)
   const normalMap  = getTex(p.normal)
   const roughMap   = getTex(p.roughness)
   const aoMap      = getTex(p.ao)
+  const bumpMap    = getTex(p.bump)
+  const specMap    = getTex(p.specular) // grayscale specular intensity map
 
-  mat.map          = map
-  mat.normalMap    = normalMap
-  mat.roughnessMap = roughMap
-  mat.aoMap        = aoMap
+  const params = p.params ?? {}
 
-  mat.color = new THREE.Color('#ffffff')
-  // If you have a roughnessMap, leave roughness at 1 so the map dictates it;
-  // otherwise pick a reasonable default.
-  mat.roughness = roughMap ? 1.0 : 0.8
-  mat.metalness = 0.0
+  if (usePhysical) {
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: '#ffffff',
+      metalness: params.metalness ?? 0.0,
+      roughness: roughMap ? 1.0 : (params.roughness ?? 0.8),
+      map: albedo || null,
+      normalMap: normalMap || null,
+      roughnessMap: roughMap || null,
+      aoMap: aoMap || null,
+      bumpMap: bumpMap || null,
+    })
+    if (bumpMap) mat.bumpScale = params.bumpScale ?? 0.05
+    if (normalMap) mat.normalScale = new THREE.Vector2(params.normalScale ?? 1, params.normalScale ?? 1)
+    if (aoMap) mat.aoMapIntensity = params.aoIntensity ?? 1.0
+
+    // Physical specular controls (r150+)
+    if ('specularIntensity' in mat) {
+      ;(mat as any).specularIntensity = params.specularIntensity ?? 0.25
+      if (specMap) (mat as any).specularIntensityMap = specMap
+      // optional: if you have a colored specular map, use specularColor/Map
+      // (mat as any).specularColor = new THREE.Color('#ffffff')
+      // (mat as any).specularColorMap = specColorTex
+    }
+
+    mat.needsUpdate = true
+    return mat
+  }
+
+  // Standard MR workflow
+  const mat = new THREE.MeshStandardMaterial({
+    color: '#ffffff',
+    metalness: params.metalness ?? 0.0,
+    roughness: roughMap ? 1.0 : (params.roughness ?? 0.8),
+    map: albedo || null,
+    normalMap: normalMap || null,
+    roughnessMap: roughMap || null,
+    aoMap: aoMap || null,
+    bumpMap: bumpMap || null,
+  })
+  if (bumpMap) mat.bumpScale = params.bumpScale ?? 0.05
+  if (normalMap) mat.normalScale = new THREE.Vector2(params.normalScale ?? 1, params.normalScale ?? 1)
+  if (aoMap) mat.aoMapIntensity = params.aoIntensity ?? 1.0
+
   mat.needsUpdate = true
   return mat
 }
+
 
 
 

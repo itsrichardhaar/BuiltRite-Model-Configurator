@@ -19,40 +19,92 @@ const MASONRY_MODERN_BRICK: MaterialChoice = {
   type: 'pbr', 
   name: 'Mastonry Modern Brick Wall', 
   albedo: '/textures/masonry/modern-brick/Modern_Brick_Wall_semlcibb_4K_BaseColor.webp',
-  normal: '/textures/masonry/modern-brick/Modern_Brick_Wall_semlcibb_4K_Normal.webp'
+  normal: '/textures/masonry/modern-brick/Modern_Brick_Wall_semlcibb_4K_Normal.webp',
+   params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
 }
 
 const MASONRY_GRAY_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Gray Brick Wall', 
   albedo: '/textures/masonry/gray-brick/Gray_Brick_Wall_ucnfejocw_4K_BaseColor.webp',
-  normal: '/textures/masonry/gray-brick/Gray_Brick_Wall_ucnfejocw_4K_Normal.webp'
+  normal: '/textures/masonry/gray-brick/Gray_Brick_Wall_ucnfejocw_4K_Normal.webp',
+  params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
 }
 
 const MASONRY_DARK_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Dark Brick Wall', 
   albedo: '/textures/masonry/dark-brick/Dark_Brick_Wall_ucmlbhgg_4K_BaseColor.webp',
-  normal: '/textures/masonry/dark-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp'
+  normal: '/textures/masonry/dark-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp',
+  params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
 }
 
 const MASONRY_BRIGHT_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Bright Brick Wall', 
   albedo: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
-  normal: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp'
+  normal: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
+  params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
 }
 
 const MASONRY_BEIGE_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Beige Brick Wall', 
   albedo: '/textures/masonry/beige-brick/Beige_Brick_Facade_uc0ndcifw_4K_BaseColor.webp',
-  normal: '/textures/masonry/beige-brick/Beige_Brick_Facade_uc0ndcifw_4K_Normal.webp'
+  normal: '/textures/masonry/beige-brick/Beige_Brick_Facade_uc0ndcifw_4K_Normal.webp',
+  params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
 }
 
 // Metal
-const METAL_CORRUGATED:     MaterialChoice = { type: 'pbr', name: 'Corrugated Metal', albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg' }
-const METAL_FACTORY:    MaterialChoice = { type: 'pbr', name: 'Metal Factory',      albedo: '/textures/metal/factory_wall_diff.jpg' }
+const METAL_RUSTIC_RED: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Metal Rustic Red', 
+  albedo: '/textures/metal/rustic-red/box_profile_metal_sheet_diff.jpg',
+  normal: '/textures/metal/rustic-red/box_profile_metal_sheet_normal.jpg',
+  params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
+}
 
 // Stone
 const STONE_WALL:     MaterialChoice = { type: 'pbr', name: 'Stone Wall', albedo: '/textures/stone/rustic_stone_wall_02_diff.jpg' }
@@ -90,12 +142,12 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY],
-  base:         [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY],
-  top_trim:     [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY],
-  metal_panels: [METAL_CORRUGATED, METAL_FACTORY],
-  roof:         [METAL_CORRUGATED, METAL_FACTORY],
-  awning:       [METAL_CORRUGATED, METAL_FACTORY, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
+  walls:        [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  base:         [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  top_trim:     [MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  metal_panels: [METAL_RUSTIC_RED],
+  roof:         [METAL_RUSTIC_RED],
+  awning:       [METAL_RUSTIC_RED, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
   foundation:   [BRICK_RED, BRICK_LIGHT, MASONRY_BRICK_WHITE, STUCCO_CONCRETE, STUCCO_PLASTER, STONE_WALL, MASONRY_MODERN_BRICK, MASONRY_GRAY_BRICK],
   garage_doors: [GARAGE_CORRUGATED, GARAGE_RED, GARAGE_WHITE, GARAGE_BLACK, GARAGE_BRONZE, GARAGE_GREY],
 }
