@@ -74,7 +74,7 @@ export default function PartPicker() {
         borderRadius: 12,
         boxShadow: '0 8px 28px rgba(0,0,0,0.08)',
         maxWidth: 'min(92vw, 1100px)',
-        width: 700,
+        width: 900,
       }}
     >
       {/* Part switcher */}
@@ -115,7 +115,7 @@ export default function PartPicker() {
           marginLeft: 'auto',
           alignItems: 'flex-start',
           minWidth: 280,
-          maxWidth: 420,
+          maxWidth: 620,
         }}
       >
         {/* Tabs row */}
