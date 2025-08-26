@@ -22,6 +22,7 @@ export type PBRChoice = {
     bumpScale?: number     // 0 disables bump
     aoIntensity?: number   // 1 = default
     specularIntensity?: number // 0..1 (MeshPhysicalMaterial)
+    
   }
 }
 
