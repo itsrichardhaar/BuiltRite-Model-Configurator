@@ -131,6 +131,22 @@ const STONE_WALL:     MaterialChoice = { type: 'pbr', name: 'Stone Wall', albedo
 const STUCCO_CONCRETE:     MaterialChoice = { type: 'pbr', name: 'Stucco Concrete', albedo: '/textures/stucco/gravel_concrete_diff_4k.jpg' }
 const STUCCO_PLASTER:    MaterialChoice = { type: 'pbr', name: 'Stucco Plaster',      albedo: '/textures/stucco/painted_plaster_wall_diff_4k.jpg' }
 
+const STUCCO_WALL_DARK_BLUE: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Stucco Wall Dark Blue', 
+  albedo: '/textures/stucco/dark-blue/EIFS_Dark_Blue.webp',
+  normal: '/textures/stucco/dark-blue/EIFS_Normal.webp',
+  params: {
+    roughness: 0.55,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+
 const STUCCO_WALL_YELLOW_TAN: MaterialChoice = { 
   type: 'pbr', 
   name: 'Stucco Wall Yellow Tan', 
@@ -160,7 +176,7 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_DARK_BLUE, METAL_RUSTIC_RED],
   base:         [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
   top_trim:     [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
   metal_panels: [METAL_RUSTIC_RED],
