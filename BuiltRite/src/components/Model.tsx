@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { makeMaterial } from '../lib/materials'
+import { makeMaterial, makeWindowGlass, makeWindowFrame } from '../lib/materials'
 import { PARTS } from '../config/parts'
 import { TEXTURE_SETS } from '../config/textures'
 import { useConfigurator, type ConfigState } from '../state/useConfigurator'
@@ -57,11 +57,11 @@ export default function Model() {
     return undefined
   }
 
-  // Ground, shadows, and special-case materials
+  // Ground, windows, shadows, and special-case materials
   useEffect(() => {
     if (!root) return
 
-    // Enable cast/receive on all meshes + material hygiene
+    // --- Nice, stable defaults on import ---
     root.traverse((o: any) => {
       if (!o?.isMesh) return
 
@@ -73,19 +73,16 @@ export default function Model() {
         o.geometry.setAttribute('uv2', o.geometry.attributes.uv)
       }
 
-      // Per-material fixes
+      // Per-material hygiene
       const mat = o.material as THREE.Material | THREE.Material[] | undefined
       const mats = Array.isArray(mat) ? mat : mat ? [mat] : []
       for (const m of mats) {
         if ('side' in m) (m as any).side = THREE.FrontSide
-        if ('shadowSide' in m) (m as any).shadowSide = THREE.FrontSide // key stabilizer
-        if ('transparent' in m && (m as any).transparent) {
-          o.receiveShadow = false // glass etc. shouldn't receive shadows
-        }
+        if ('shadowSide' in m) (m as any).shadowSide = THREE.FrontSide
       }
     })
 
-    // Place model on ground & compute size for shadow plane
+    // --- Place on ground & compute shadow plane footprint ---
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
@@ -93,7 +90,7 @@ export default function Model() {
     box.getSize(size)
     setFootprint({ x: size.x * 1.2, z: size.z * 1.2 })
 
-    // Make GLB "ground" meshes unlit & NOT part of shadow pipeline
+    // --- Make GLB "ground" meshes unlit & NOT part of shadow pipeline ---
     const GROUND_NAME_HITS = ['floor_plane', 'ground'] as const
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -111,20 +108,40 @@ export default function Model() {
       }
     })
 
-    // Keep windows_doors a fixed solid color
-    const WINDOW_DOORS_COLOR = '#2f2f2f'
+    // --- WINDOWS: assign glass + frame materials by names we found in your GLB ---
+    const glassMat = makeWindowGlass()
+    const frameMat = makeWindowFrame()
+
     root.traverse((o: any) => {
       if (!o?.isMesh) return
-      const name = (o.name || '').toLowerCase()
-      if (name.includes('windows_doors')) {
-        o.material = new THREE.MeshStandardMaterial({
-          color: WINDOW_DOORS_COLOR,
-          roughness: 0.8,
-          metalness: 0.1,
-        })
+      const nodeName = (o.name || '').toLowerCase()
+      const geomName = (o.geometry?.name || '').toLowerCase()
+      const matName  = (o.material?.name || '').toLowerCase()
+
+      const isGlass =
+        matName.includes('window_glass') ||
+        geomName === 'plane.008_0' ||                    // from your GLB
+        nodeName.startsWith('windows_doors')             // glass subparts often live here
+      const isFrame =
+        matName.includes('window_frame') ||
+        geomName === 'plane.008_1' ||
+        geomName === 'cube.027_0'
+
+      if (isGlass) {
+        o.material = glassMat
+        o.castShadow = false
+        o.receiveShadow = false
+        fixedMaterialUUIDs.current.add(o.uuid)
+        return
+      }
+
+      if (isFrame || nodeName.includes('windows_doors')) {
+        // Fallback: if it's part of windows_doors but not caught as glass, treat as frame
+        o.material = frameMat
         o.castShadow = true
         o.receiveShadow = true
         fixedMaterialUUIDs.current.add(o.uuid)
+        return
       }
     })
   }, [root])
