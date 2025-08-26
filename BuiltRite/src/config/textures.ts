@@ -1,20 +1,8 @@
 
 import type { MaterialChoice } from '../state/useConfigurator'
 
-// Brick
-const BRICK_RED: MaterialChoice = { type: 'pbr', name: 'Brick Red',   albedo: '/textures/brick/red_brick_diff.jpg' }
-const BRICK_LIGHT: MaterialChoice = { 
-  type: 'pbr', 
-  name: 'Brick Light', 
-  albedo: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg', 
-  roughness: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg', 
-  normal: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg',
-  ao: '/textures/brick/seaworn_sandstone_brick_diff_4k.jpg' ,
-
-}
-
 // Masonry
-const MASONRY_BRICK_WHITE: MaterialChoice = { type: 'pbr', name: 'Masonry Brick White', albedo: '/textures/brick/brick_wall_003_diffuse_4k.webp' }
+
 const MASONRY_TAN_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Mastonry Tan Brick Wall', 
@@ -276,12 +264,9 @@ const METAL_ASHE_GRAY: MaterialChoice = {
 }
 
 // Stone
-const STONE_WALL:     MaterialChoice = { type: 'pbr', name: 'Stone Wall', albedo: '/textures/stone/rustic_stone_wall_02_diff.jpg' }
+
 
 // Stucco
-const STUCCO_CONCRETE:     MaterialChoice = { type: 'pbr', name: 'Stucco Concrete', albedo: '/textures/stucco/gravel_concrete_diff_4k.jpg' }
-const STUCCO_PLASTER:    MaterialChoice = { type: 'pbr', name: 'Stucco Plaster',      albedo: '/textures/stucco/painted_plaster_wall_diff_4k.jpg' }
-
 const STUCCO_WALL_DARK_BLUE: MaterialChoice = { 
   type: 'pbr', 
   name: 'Stucco Wall Dark Blue', 
@@ -353,14 +338,6 @@ const STUCCO_WALL_LIGHT_GRAY: MaterialChoice = {
   albedo: '/textures/stucco/light-gray/painted_plaster_wall_diff_4k.jpg',
   normal: '/textures/stucco/light-gray/painted_plaster_wall_normal.jpg'
 }
-
-// Garage Doors
-const GARAGE_CORRUGATED: MaterialChoice = { type: 'pbr', name: 'Corrugated Metal', albedo: '/textures/metal/corrugated_iron_02_diff_4k.jpg'}
-const GARAGE_WHITE: MaterialChoice = { type: 'color', name: 'White',       value: '#ffffff' }
-const GARAGE_BLACK: MaterialChoice = { type: 'color', name: 'Black',       value: '#111111' }
-const GARAGE_BRONZE: MaterialChoice = { type: 'color', name: 'Dark Bronze', value: '#3b3b3b' }
-const GARAGE_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value: '#8a8f98' }
-const GARAGE_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 const AWNING_WHITE: MaterialChoice = { type: 'color', name: 'White',       value: '#ffffff' }
 const AWNING_BLACK: MaterialChoice = { type: 'color', name: 'Black',       value: '#111111' }
