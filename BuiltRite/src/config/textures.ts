@@ -31,6 +31,21 @@ const MASONRY_TAN_BRICK: MaterialChoice = {
   },
 }
 
+const MASONRY_LIGHT_GRAY_BRICK: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Mastonry Light Gray Brick Wall', 
+  albedo: '/textures/masonry/light-gray-brick/Light_Gray_Brick_BaseColor.webp',
+  normal: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Normal.webp',
+   params: {
+    roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
+    metalness: 0.0,
+    normalScale: 1.0,
+    bumpScale: 0.04,
+    aoIntensity: 1.0,
+    specularIntensity: 0.25,
+  },
+}
+
 const MASONRY_GRAY_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Gray Brick Wall', 
@@ -46,11 +61,11 @@ const MASONRY_GRAY_BRICK: MaterialChoice = {
   },
 }
 
-const MASONRY_DARK_BRICK: MaterialChoice = { 
+const MASONRY_DARK_RED_BRICK: MaterialChoice = { 
   type: 'pbr', 
-  name: 'Dark Brick Wall', 
-  albedo: '/textures/masonry/dark-brick/Dark_Brick_Wall_ucmlbhgg_4K_BaseColor.webp',
-  normal: '/textures/masonry/dark-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp',
+  name: 'Dark Red Brick Wall', 
+  albedo: '/textures/masonry/dark-red-brick/red_brick_diff_4k.jpg',
+  normal: '/textures/masonry/dark-red-brick/red_brick_diff_4k.jpg',
   params: {
     roughness: 1.0,        // used when no roughnessMap; when map exists, this is a baseline
     metalness: 0.0,
@@ -145,9 +160,9 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_TAN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
-  base:         [MASONRY_TAN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
-  top_trim:     [MASONRY_TAN_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  base:         [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
+  top_trim:     [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, METAL_RUSTIC_RED],
   metal_panels: [METAL_RUSTIC_RED],
   roof:         [METAL_RUSTIC_RED],
   awning:       [METAL_RUSTIC_RED, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
