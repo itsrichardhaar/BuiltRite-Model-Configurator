@@ -3,7 +3,7 @@ import { useConfigurator, type ConfigState } from '../../state/useConfigurator'
 
 export default function RotateControls() {
   const rotateBy = useConfigurator((s: ConfigState) => s.rotateBy)
-  const rotateXBy = useConfigurator((s: ConfigState) => s.rotateXBy) // new: vertical rotation
+  const rotateXBy = useConfigurator((s: ConfigState) => s.rotateXBy) 
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

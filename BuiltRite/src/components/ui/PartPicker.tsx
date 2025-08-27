@@ -8,7 +8,7 @@ import { useConfigurator, type ConfigState, type MaterialChoice } from '../../st
 type Cat = 'Color' | 'Masonry' | 'Metal' | 'Stone' | 'Stucco' | 'Split Face'
 const ALL_CATS: Cat[] = ['Color', 'Masonry', 'Stone', 'Stucco', 'Split Face', 'Metal']
 
-// Prefer this order if those ids exist in PARTS
+// Order of PARTS ids
 const PREFERRED_PART_ORDER = [
   'walls',
   'base',
@@ -22,18 +22,17 @@ export default function PartPicker() {
   const selection = useConfigurator((s: ConfigState) => s.selection)
   const setSelection = useConfigurator((s: ConfigState) => s.setSelection)
 
-  // Build the list of parts that have texture options, honoring our preferred order first
+
   const partsWithOptions = useMemo(() => {
     const hasOpts = (id: string) => (TEXTURE_SETS[id]?.length ?? 0) > 0
     const byId = new Map(PARTS.map(p => [p.id, p]))
     const ordered: typeof PARTS = []
 
-    // Add preferred ids that exist AND have options
     for (const id of PREFERRED_PART_ORDER) {
       const p = byId.get(id)
       if (p && hasOpts(p.id)) ordered.push(p)
     }
-    // Add any remaining parts with options that weren’t in preferred order
+   
     for (const p of PARTS) {
       if (!ordered.find(o => o.id === p.id) && hasOpts(p.id)) ordered.push(p)
     }
@@ -53,7 +52,7 @@ export default function PartPicker() {
   const activeCat: Cat = activeTabByPart[part.id] ?? defaultCat
 
   const filtered = options.filter(opt => inferCategory(opt) === activeCat)
-  const shownOptions = filtered.length ? filtered : options // fallback so UI never empties
+  const shownOptions = filtered.length ? filtered : options 
 
   const setTab = (cat: Cat) =>
     setActiveTabByPart(prev => ({ ...prev, [part.id]: cat }))

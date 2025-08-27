@@ -12,7 +12,7 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.anisotropy = 8
 
-  // Modern colorSpace API (r150+)
+ 
   if (isColorMap && 'SRGBColorSpace' in THREE) {
     ;(t as any).colorSpace = (THREE as any).SRGBColorSpace
   }
@@ -36,7 +36,7 @@ export function makeWindowGlass(): THREE.MeshPhysicalMaterial {
     color: new THREE.Color('#a9c6df'),
     transparent: true,
     opacity: 1,
-    depthWrite: false, // important so glass sorts correctly with frames
+    depthWrite: false, 
     side: THREE.FrontSide,
     envMapIntensity: 1.1,
   })
@@ -50,7 +50,7 @@ export function makeWindowFrame(): THREE.MeshStandardMaterial {
   })
 }
 
-// --------- Main factory used by configurator ---------
+
 export function makeMaterial(choice: MaterialChoice): THREE.Material {
   // Optional: if you ever mark window presets in your config
   if ((choice as any)?.preset === 'window_glass') return makeWindowGlass()

@@ -7,9 +7,9 @@ import RotateControls from './ui/RotationControls'
 import PartPicker from './ui/PartPicker'
 
 export default function Viewer() {
-  // ---- "Sun" direction knobs ----
-  const AZIMUTH_DEG = 35;   // 0 = +X, 90 = +Z
-  const ELEVATION_DEG = 60; // 0 = horizon, 90 = straight down
+
+  const AZIMUTH_DEG = 35;   
+  const ELEVATION_DEG = 60; 
   const DIST = 100;
 
   // Convert spherical → Cartesian
@@ -28,8 +28,7 @@ export default function Viewer() {
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
-          // If shimmer persists, try VSM (uncomment):
-          // gl.shadowMap.type = THREE.VSMShadowMap
+
         }}
       >
         
@@ -43,7 +42,7 @@ export default function Viewer() {
           intensity={1.25}
           castShadow
 
-          // High-res shadow map
+          // Shadow map
           shadow-mapSize-width={4096}
           shadow-mapSize-height={4096}
 
@@ -55,7 +54,7 @@ export default function Viewer() {
           shadow-camera-top={35}
           shadow-camera-bottom={-35}
 
-          // Bias tuning (gentle values reduce shimmer without floating shadows)
+          // Bias tuning 
           shadow-bias={-0.00015}
           shadow-normalBias={0.02}
 

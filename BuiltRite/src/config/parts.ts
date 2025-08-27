@@ -9,8 +9,5 @@ export const PARTS: Part[] = [
   { id: 'windows_doors', label: 'Windows & Doors', meshNames: ['windows_doors'] },
   { id: 'garage_doors', label: 'Roll Up Doors',  meshNames: ['garrage_doors'] }
   
-  // Deliberately excluding multi-material meshes to avoid breaking glass:
-  // windows_doors (frame + glass), garrage_doors (two materials), fecad_corner (mixed)
-  // Also excluding floor_plane (we convert to ShadowMaterial in Model.tsx)
 ]
 

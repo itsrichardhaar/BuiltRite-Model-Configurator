@@ -10,11 +10,11 @@ import { useConfigurator, type ConfigState } from '../state/useConfigurator'
 
 const MODEL_URL = '/models/building_01_v002.glb'
 
-/* ---------------- UV repeat control (scale UVs once) ---------------- */
+/* ---------------- UV repeat control ---------------- */
 
-// Per-part UV scale (tweak to taste). <1 = fewer repeats (larger texture)
+
 const PART_UV_SCALE: Record<string, number> = {
-  // examples; add/remove as you wish:
+
   walls: 0.7,
   base: 0.6,
   top_trim: 0.7,
@@ -26,11 +26,11 @@ const DEFAULT_UV_SCALE = 0.6
 
 function scaleUVsOnce(obj: any, scale: number) {
   if (!obj?.geometry) return
-  // guard: only once
+
   if (obj.userData && obj.userData._uvScaled) return
   const geom: THREE.BufferGeometry = obj.geometry
 
-  // clone once so we don't mutate a shared buffer among meshes
+  // clone once so we don't mutate meshes
   const cloned = geom.clone()
   if (cloned.attributes.uv) {
     const uv = cloned.attributes.uv as THREE.BufferAttribute
@@ -45,7 +45,7 @@ function scaleUVsOnce(obj: any, scale: number) {
 
 /* ---------------- UV jitter helpers (offset-only, once per selection) ---------------- */
 
-// stable key for current selection
+
 function selectionKey(sel: any) {
   if (!sel) return 'none'
   if (sel.type === 'color') return `color:${sel.value}`
@@ -53,14 +53,14 @@ function selectionKey(sel: any) {
   return JSON.stringify(sel)
 }
 
-// tiny stable hash -> [0,1)
+
 function hash01(str: string) {
   let h = 2166136261
   for (let i = 0; i < str.length; i++) h = Math.imul(h ^ str.charCodeAt(i), 16777619)
   return ((h >>> 0) % 1000) / 1000
 }
 
-// clone & offset a texture (no rotation)
+
 function jitterTextureOnce(tex: THREE.Texture, u: number, v: number) {
   const t = tex.clone()
   t.offset.set((tex.offset?.x ?? 0) + u, (tex.offset?.y ?? 0) + v)
@@ -68,11 +68,11 @@ function jitterTextureOnce(tex: THREE.Texture, u: number, v: number) {
   return t
 }
 
-// apply offset jitter to all maps on a material (skip glass), mark as done
+
 function applyOffsetJitterOnce(material: any, seed: string) {
   const apply = (mat: any) => {
     if (!mat || (mat.userData && mat.userData._jittered)) return
-    // skip transmissive glass
+
     if (mat.isMeshPhysicalMaterial && typeof mat.transmission === 'number' && mat.transmission > 0.2) {
       mat.userData = { ...(mat.userData || {}), _jittered: true }
       return
@@ -108,14 +108,14 @@ export default function Model() {
   const { scene } = useGLTF(MODEL_URL)
   const root = useMemo(() => scene.clone(true), [scene])
 
-  // Do-not-touch sets
+
   const groundMeshUUIDs = useRef<Set<string>>(new Set())
   const fixedMaterialUUIDs = useRef<Set<string>>(new Set())
 
-  // Size for the shadow receiver (no mask involved)
+
   const [footprint, setFootprint] = useState<{ x: number; z: number }>({ x: 50, z: 50 })
 
-  // Default selections
+
   useEffect(() => {
     for (const part of PARTS) {
       if (!selection[part.id]) {
@@ -125,7 +125,7 @@ export default function Model() {
     }
   }, [selection])
 
-  // Name -> part mapping (checks ancestors too)
+  
   const nameToPart = useMemo(() => {
     const m = new Map<string, string>()
     for (const part of PARTS) for (const n of part.meshNames) m.set(n.toLowerCase(), part.id)
@@ -146,7 +146,7 @@ export default function Model() {
   useEffect(() => {
     if (!root) return
 
-    // --- Nice, stable defaults on import ---
+
     root.traverse((o: any) => {
       if (!o?.isMesh) return
 
@@ -158,7 +158,7 @@ export default function Model() {
         o.geometry.setAttribute('uv2', o.geometry.attributes.uv)
       }
 
-      // Per-material hygiene
+    
       const mat = o.material as THREE.Material | THREE.Material[] | undefined
       const mats = Array.isArray(mat) ? mat : mat ? [mat] : []
       for (const m of mats) {
@@ -167,7 +167,7 @@ export default function Model() {
       }
     })
 
-    // --- Place on ground & compute shadow plane footprint ---
+    // --- Place on ground & compute shadow plane
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
@@ -175,7 +175,7 @@ export default function Model() {
     box.getSize(size)
     setFootprint({ x: size.x * 1.2, z: size.z * 1.2 })
 
-    // --- Make GLB "ground" meshes unlit & NOT part of shadow pipeline ---
+    // --- Make GLB "ground" meshes unlit
     const GROUND_NAME_HITS = ['floor_plane', 'ground'] as const
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -194,7 +194,7 @@ export default function Model() {
       }
     })
 
-    // --- WINDOWS: assign glass + frame materials by names we found in your GLB ---
+    // --- WINDOWS
     const glassMat = makeWindowGlass()
     const frameMat = makeWindowFrame()
 
@@ -232,7 +232,7 @@ export default function Model() {
     })
   }, [root])
 
-  // Live material pass (assign only when selection changes; jitter + scale UV once)
+ 
   useFrame(() => {
     root.traverse((obj: any) => {
       if (!obj?.isMesh) return
@@ -250,10 +250,9 @@ export default function Model() {
         const mat = makeMaterial(sel)
         obj.material = Array.isArray(obj.material) ? obj.material.map(() => mat) : mat
 
-        // (1) Apply UV offset jitter ONCE for this material instance
+        // Apply UV offset jitter ONCE 
         applyOffsetJitterOnce(obj.material, obj.uuid)
 
-        // (2) Scale the geometry UVs ONCE to reduce repeats
         const scale = PART_UV_SCALE[partId] ?? DEFAULT_UV_SCALE
         if (scale !== 1) scaleUVsOnce(obj, scale)
 
