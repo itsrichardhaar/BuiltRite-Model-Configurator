@@ -24,21 +24,21 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
 // --------- Window helpers ---------
 export function makeWindowGlass(): THREE.MeshPhysicalMaterial {
   return new THREE.MeshPhysicalMaterial({
-    transmission: 0.95,
-    thickness: 0.3,
+    transmission: 0.6,
+    thickness: 1.2,
     ior: 1.5,
-    roughness: 0.05,
+    roughness: 0.35,
     metalness: 0.0,
     clearcoat: 0.15,
     clearcoatRoughness: 0.05,
-    attenuationColor: new THREE.Color('#a9c6df'),
+    attenuationColor: new THREE.Color('#cfe0ea'),
     attenuationDistance: 2.0,
-    color: new THREE.Color('#bcd3e6'),
+    color: new THREE.Color('#a9c6df'),
     transparent: true,
     opacity: 1,
     depthWrite: false, // important so glass sorts correctly with frames
     side: THREE.FrontSide,
-    envMapIntensity: 1.2,
+    envMapIntensity: 1.1,
   })
 }
 
