@@ -24,7 +24,7 @@ export default function Viewer() {
       <Canvas
         shadows
         camera={{ position: [0, 6, 45], fov: 45 }}
-        style={{ background: '#f2f2f3' }}
+        style={{ background: '#FAF9F7' }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
@@ -32,6 +32,7 @@ export default function Viewer() {
           // gl.shadowMap.type = THREE.VSMShadowMap
         }}
       >
+        
         {/* Softer ambient to keep contrast in shadows */}
         <ambientLight intensity={0.9} />
 
@@ -59,7 +60,7 @@ export default function Viewer() {
           shadow-normalBias={0.02}
 
           // Small kernel blur for PCF
-          shadow-radius={2}
+          shadow-radius={50}
         />
 
         {/* If you want a non-shadowing fill: */}

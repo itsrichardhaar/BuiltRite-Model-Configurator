@@ -223,8 +223,6 @@ const METAL_BRIGHT_WHITE: MaterialChoice = {
   name: 'Metal Bright White', 
   albedo: '/textures/metal/bright-white/Metal_Cavity.webp',
   normal: '/textures/metal/ash-gray/Metal_Normal.webp',
-  roughness: '/textures/metal/ash-gray/Metal_Roughness.webp',
-  ao: 'BuiltRite/public/textures/metal/ash-gray/Metal_AO.webp',
   params: {
     roughness: 0.55,        
     metalness: 0.05,
@@ -382,6 +380,41 @@ const STUCCO_WALL_LIGHT_GRAY: MaterialChoice = {
   normal: '/textures/stucco/light-gray/painted_plaster_wall_normal.jpg'
 }
 
+//Split Face
+
+const SPLIT_FACE_BROWN: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Split Face Brown', 
+  albedo: '/textures/split-face/brown/Splitface_Brown_Tan.webp',
+  normal: '/textures/split-face/beige/Splitface_Normal.jpg',
+  roughness: '/textures/split-face/beige/Splitface_Roughness.jpg',
+  params: {
+    roughness: 0.55,        
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+const SPLIT_FACE_BEIGE: MaterialChoice = { 
+  type: 'pbr', 
+  name: 'Split Face Beige', 
+  albedo: '/textures/split-face/beige/Splitface_Beige_Gray.webp',
+  normal: '/textures/split-face/beige/Splitface_Normal.jpg',
+  roughness: '/textures/split-face/beige/Splitface_Roughness.jpg',
+  params: {
+    roughness: 0.55,        
+    metalness: 0.05,
+    normalScale: 1.0,
+    bumpScale: 0.02,
+    aoIntensity: 0.95,
+    specularIntensity: 0.25,
+  },
+}
+
+
 const AWNING_WHITE: MaterialChoice = { type: 'color', name: 'White',       value: '#ffffff' }
 const AWNING_BLACK: MaterialChoice = { type: 'color', name: 'Black',       value: '#111111' }
 const AWNING_BRONZE: MaterialChoice = { type: 'color', name: 'Dark Bronze', value: '#3b3b3b' }
@@ -389,8 +422,8 @@ const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
-  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_DARK_BLUE, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE, STONE_GRAY, STONE_WHITE, STONE_TAN],
-  base:         [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE, STONE_GRAY, STONE_WHITE, STONE_TAN],
+  walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_DARK_BLUE, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE, STONE_GRAY, STONE_WHITE, STONE_TAN, SPLIT_FACE_BROWN, SPLIT_FACE_BEIGE],
+  base:         [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE, STONE_GRAY, STONE_WHITE, STONE_TAN, SPLIT_FACE_BROWN, SPLIT_FACE_BEIGE],
   top_trim:     [STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE],
   metal_panels: [METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE],
   roof:         [METAL_RUSTIC_RED],

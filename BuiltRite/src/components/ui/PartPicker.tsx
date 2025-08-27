@@ -5,8 +5,8 @@ import { PARTS } from '../../config/parts'
 import { TEXTURE_SETS } from '../../config/textures'
 import { useConfigurator, type ConfigState, type MaterialChoice } from '../../state/useConfigurator'
 
-type Cat = 'Color' | 'Masonry' | 'Metal' | 'Stone' | 'Stucco'
-const ALL_CATS: Cat[] = ['Color', 'Masonry', 'Stone', 'Stucco', 'Metal']
+type Cat = 'Color' | 'Masonry' | 'Metal' | 'Stone' | 'Stucco' | 'Split Face'
+const ALL_CATS: Cat[] = ['Color', 'Masonry', 'Stone', 'Stucco', 'Split Face', 'Metal']
 
 // Prefer this order if those ids exist in PARTS
 const PREFERRED_PART_ORDER = [
@@ -302,6 +302,11 @@ function inferCategory(opt: MaterialChoice): Cat | null {
     has('cmu') ||
     has('block')
   ) return 'Masonry'
+
+  if (
+    inFolder('split-face') ||
+    has('split-face') 
+  ) return 'Split Face'
 
   return null
 }
