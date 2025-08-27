@@ -142,16 +142,25 @@ export default function PartPicker() {
           {shownOptions.map((opt, i) => {
             const isSel = eq(selection[part.id], opt)
             const style: React.CSSProperties = {
-              height: 32,
-              width: 32,
-              borderRadius: 0, // square like bricks/tiles
-              border: isSel ? '2px solid #111' : '1px solid #d0d0d0',
-              background: opt.type === 'color' ? opt.value : '#c9cdd3',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              outline: 'none',
-              cursor: 'pointer',
-              flex: '0 0 auto',
+               width: 32,
+                height: 32,
+                minWidth: 32,
+                minHeight: 32,
+                borderRadius: '50%',
+                border: isSel ? '2px solid #111' : '2px solid #d0d0d0',
+                background: opt.type === 'color' ? opt.value : '#c9cdd3',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                padding: 0,
+                boxSizing: 'border-box',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                display: 'inline-block',      
+                lineHeight: 0,               
+                outline: 'none',
+                cursor: 'pointer',
+                flex: '0 0 auto',
             }
             if (opt.type === 'pbr') style.backgroundImage = `url(${opt.albedo})`
             return (
