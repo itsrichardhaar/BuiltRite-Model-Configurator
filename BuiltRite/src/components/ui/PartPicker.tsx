@@ -110,7 +110,7 @@ export default function PartPicker() {
           display: 'flex',
           flexDirection: 'column',
           gap: 8,
-          marginLeft: 'auto',
+          marginLeft: '20px',
           alignItems: 'flex-start',
           minWidth: 280,
           maxWidth: 620,
