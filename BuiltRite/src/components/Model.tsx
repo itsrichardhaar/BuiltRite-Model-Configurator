@@ -10,6 +10,91 @@ import { useConfigurator, type ConfigState } from '../state/useConfigurator'
 
 const MODEL_URL = '/models/building_01_v002.glb'
 
+/* ---------------- UV repeat control (scale UVs once) ---------------- */
+
+// Per-part UV scale (tweak to taste). <1 = fewer repeats (larger texture)
+const PART_UV_SCALE: Record<string, number> = {
+  // examples; add/remove as you wish:
+  walls: 0.7,
+  base: 0.6,
+  top_trim: 0.7,
+  metal_panels: 0.7,
+  awning: 0.6,
+  garrage_doors: 0.5,
+}
+const DEFAULT_UV_SCALE = 0.6
+
+function scaleUVsOnce(obj: any, scale: number) {
+  if (!obj?.geometry) return
+  // guard: only once
+  if (obj.userData && obj.userData._uvScaled) return
+  const geom: THREE.BufferGeometry = obj.geometry
+
+  // clone once so we don't mutate a shared buffer among meshes
+  const cloned = geom.clone()
+  if (cloned.attributes.uv) {
+    const uv = cloned.attributes.uv as THREE.BufferAttribute
+    for (let i = 0; i < uv.count; i++) {
+      uv.setXY(i, uv.getX(i) * scale, uv.getY(i) * scale)
+    }
+    uv.needsUpdate = true
+  }
+  obj.geometry = cloned
+  obj.userData._uvScaled = true
+}
+
+/* ---------------- UV jitter helpers (offset-only, once per selection) ---------------- */
+
+// stable key for current selection
+function selectionKey(sel: any) {
+  if (!sel) return 'none'
+  if (sel.type === 'color') return `color:${sel.value}`
+  if (sel.type === 'pbr') return `pbr:${sel.name || sel.albedo || 'anon'}`
+  return JSON.stringify(sel)
+}
+
+// tiny stable hash -> [0,1)
+function hash01(str: string) {
+  let h = 2166136261
+  for (let i = 0; i < str.length; i++) h = Math.imul(h ^ str.charCodeAt(i), 16777619)
+  return ((h >>> 0) % 1000) / 1000
+}
+
+// clone & offset a texture (no rotation)
+function jitterTextureOnce(tex: THREE.Texture, u: number, v: number) {
+  const t = tex.clone()
+  t.offset.set((tex.offset?.x ?? 0) + u, (tex.offset?.y ?? 0) + v)
+  t.needsUpdate = true
+  return t
+}
+
+// apply offset jitter to all maps on a material (skip glass), mark as done
+function applyOffsetJitterOnce(material: any, seed: string) {
+  const apply = (mat: any) => {
+    if (!mat || (mat.userData && mat.userData._jittered)) return
+    // skip transmissive glass
+    if (mat.isMeshPhysicalMaterial && typeof mat.transmission === 'number' && mat.transmission > 0.2) {
+      mat.userData = { ...(mat.userData || {}), _jittered: true }
+      return
+    }
+    const u = hash01(seed)
+    const v = hash01('v' + seed)
+    const keys = ['map','roughnessMap','metalnessMap','normalMap','aoMap','bumpMap','specularMap']
+    for (const k of keys) {
+      const tex: THREE.Texture | undefined = mat[k]
+      if (!tex) continue
+      mat[k] = jitterTextureOnce(tex, u, v)
+    }
+    mat.userData = { ...(mat.userData || {}), _jittered: true }
+    mat.needsUpdate = true
+  }
+
+  if (Array.isArray(material)) material.forEach(apply)
+  else apply(material)
+}
+
+/* ------------------------------------------------------------------------------------ */
+
 export default function Model() {
   const group = useRef<THREE.Group>(null!)
 
@@ -102,6 +187,7 @@ export default function Model() {
       if (isGround) {
         groundMeshUUIDs.current.add(o.uuid)
         const whiteMat = new THREE.MeshBasicMaterial({ color: '#ffffff' })
+        whiteMat.toneMapped = false
         o.material = Array.isArray(o.material) ? o.material.map(() => whiteMat) : whiteMat
         o.castShadow = false
         o.receiveShadow = false
@@ -118,14 +204,15 @@ export default function Model() {
       const geomName = (o.geometry?.name || '').toLowerCase()
       const matName  = (o.material?.name || '').toLowerCase()
 
-      const isGlass =
-        matName.includes('window_glass') ||
-        geomName === 'plane.008_0' ||                    // from your GLB
-        nodeName.startsWith('windows_doors')             // glass subparts often live here
-      const isFrame =
-        matName.includes('window_frame') ||
-        geomName === 'plane.008_1' ||
-        geomName === 'cube.027_0'
+    const isGlass =
+      matName.includes('window_glass') ||
+      geomName === 'plane.008_0' ||
+      nodeName.startsWith('windows_doors')
+
+    const isFrame =
+      matName.includes('window_frame') ||
+      geomName === 'plane.008_1' ||
+      geomName === 'cube.027_0'
 
       if (isGlass) {
         o.material = glassMat
@@ -136,7 +223,6 @@ export default function Model() {
       }
 
       if (isFrame || nodeName.includes('windows_doors')) {
-        // Fallback: if it's part of windows_doors but not caught as glass, treat as frame
         o.material = frameMat
         o.castShadow = true
         o.receiveShadow = true
@@ -146,7 +232,7 @@ export default function Model() {
     })
   }, [root])
 
-  // Live material pass (skip protected meshes)
+  // Live material pass (assign only when selection changes; jitter + scale UV once)
   useFrame(() => {
     root.traverse((obj: any) => {
       if (!obj?.isMesh) return
@@ -157,10 +243,22 @@ export default function Model() {
       if (!partId) return
 
       const sel = selection[partId]
-      if (!sel) return
+      const key = selectionKey(sel)
 
-      const mat = makeMaterial(sel)
-      obj.material = Array.isArray(obj.material) ? obj.material.map(() => mat) : mat
+      if (obj.userData._matKey !== key) {
+        if (!sel) return
+        const mat = makeMaterial(sel)
+        obj.material = Array.isArray(obj.material) ? obj.material.map(() => mat) : mat
+
+        // (1) Apply UV offset jitter ONCE for this material instance
+        applyOffsetJitterOnce(obj.material, obj.uuid)
+
+        // (2) Scale the geometry UVs ONCE to reduce repeats
+        const scale = PART_UV_SCALE[partId] ?? DEFAULT_UV_SCALE
+        if (scale !== 1) scaleUVsOnce(obj, scale)
+
+        obj.userData._matKey = key
+      }
     })
   })
 
@@ -193,6 +291,9 @@ export default function Model() {
 }
 
 useGLTF.preload(MODEL_URL)
+
+
+
 
 
 
