@@ -92,6 +92,20 @@ export function makeWindowFrame(): THREE.MeshStandardMaterial {
   })
 }
 
+
+/* ---------------- Logo material ----------------- */
+
+export function makeLogoMaterial(color = '#000') {
+  const m = new THREE.MeshStandardMaterial({
+    color,
+    roughness: 0.55,
+    metalness: 0.05,
+    emissive: '#000000',   // tweak if you want slight glow
+    // emissiveIntensity: 0.25,
+  })
+  return m
+}
+
 /* ---------------- Base material builder ---------------- */
 
 export function makeMaterial(choice: MaterialChoice): THREE.Material {

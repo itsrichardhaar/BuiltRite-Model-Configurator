@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { makeWindowGlass, makeWindowFrame, makeMaterialForPart } from '../lib/materials'
+import { makeWindowGlass, makeWindowFrame, makeMaterialForPart, makeLogoMaterial } from '../lib/materials'
 import { PARTS } from '../config/parts'
 import { TEXTURE_SETS } from '../config/textures'
 import { useConfigurator, type ConfigState } from '../state/useConfigurator'
@@ -27,7 +27,7 @@ function scaleUVsOnce(obj: any, scale: number) {
   if (obj.userData && obj.userData._uvScaled) return
 
   const geom: THREE.BufferGeometry = obj.geometry
-  const cloned = geom.clone() // avoid mutating shared geometry
+  const cloned = geom.clone()
   if (cloned.attributes.uv) {
     const uv = cloned.attributes.uv as THREE.BufferAttribute
     for (let i = 0; i < uv.count; i++) {
@@ -65,7 +65,7 @@ function applyOffsetJitterOnce(material: any, seed: string) {
   const apply = (mat: any) => {
     if (!mat || (mat.userData && mat.userData._jittered)) return
 
-    // skip glass (physical transmission) so it stays clean
+    // skip glass so it stays clean
     if (mat.isMeshPhysicalMaterial && typeof mat.transmission === 'number' && mat.transmission > 0.2) {
       mat.userData = { ...(mat.userData || {}), _jittered: true }
       return
@@ -179,6 +179,28 @@ export default function Model() {
         o.material = Array.isArray(o.material) ? o.material.map(() => whiteMat) : whiteMat
         o.castShadow = false
         o.receiveShadow = false
+      }
+    })
+
+    // LOGO
+
+    const logoMat = makeLogoMaterial('#000')
+
+    root.traverse((o: any) => {
+      if (!o?.isMesh) return
+      const nodeName = (o.name || '').toLowerCase()
+      const geomName = (o.geometry?.name || '').toLowerCase()
+      const matName  = (o.material?.name || '').toLowerCase()
+
+      // robust detection: node or material has 'logo' (also catches your BR_logo)
+      const looksLikeLogo =
+        nodeName.includes('logo') || matName.includes('logo') || geomName.includes('logo')
+
+      if (looksLikeLogo) {
+        o.material = logoMat
+        o.castShadow = true
+        o.receiveShadow = true
+        fixedMaterialUUIDs.current.add(o.uuid) // <- prevents later overrides in the per-frame pass
       }
     })
 
