@@ -184,7 +184,7 @@ export default function Model() {
 
     // LOGO
 
-    const logoMat = makeLogoMaterial('#000')
+    const logoMat = makeLogoMaterial('#fff')
 
     root.traverse((o: any) => {
       if (!o?.isMesh) return

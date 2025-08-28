@@ -421,12 +421,16 @@ const SPLIT_FACE_BEIGE: MaterialChoice = {
   },
 }
 
-
+//Awning colors
 const AWNING_WHITE: MaterialChoice = { type: 'color', name: 'White',       value: '#ffffff' }
 const AWNING_BLACK: MaterialChoice = { type: 'color', name: 'Black',       value: '#111111' }
 const AWNING_BRONZE: MaterialChoice = { type: 'color', name: 'Dark Bronze', value: '#3b3b3b' }
 const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value: '#8a8f98' }
 const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
+
+//Rolling doors
+
+
 
 export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
   walls:        [MASONRY_TAN_BRICK, MASONRY_LIGHT_GRAY_BRICK, MASONRY_GRAY_BRICK, MASONRY_DARK_RED_BRICK, MASONRY_BRIGHT_BRICK, MASONRY_BEIGE_BRICK, STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_DARK_BLUE, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE, STONE_GRAY, STONE_WHITE, STONE_TAN, SPLIT_FACE_BROWN, SPLIT_FACE_BEIGE],
