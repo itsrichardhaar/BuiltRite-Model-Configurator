@@ -25,15 +25,15 @@ const MASONRY_LIGHT_GRAY_BRICK: MaterialChoice = {
   name: 'Mastonry Light Gray Brick Wall', 
   albedo: '/textures/masonry/light-gray-brick/Light_Gray_Brick_BaseColor.webp',
   normal: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Normal.webp',
-  roughness: '',
+  roughness: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Roughness.webp',
   ao: '/textures/masonry/light-gray-brick/Light_Gray_Brick_AO.webp',
    params: {
-    roughness: 1.0,        
+    roughness: 0.9,        
     metalness: 0.0,
-    normalScale: 1.0,
-    bumpScale: 0.04,
-    aoIntensity: 1.0,
-    specularIntensity: 0.25,
+    normalScale: 0.6,
+    bumpScale: 0.02,
+    aoIntensity: 0.9,
+    specularIntensity: 0.15,
   },
 }
 
@@ -42,13 +42,15 @@ const MASONRY_GRAY_BRICK: MaterialChoice = {
   name: 'Gray Brick Wall', 
   albedo: '/textures/masonry/gray-brick/Gray_Brick_BaseColor.webp',
   normal: '/textures/masonry/gray-brick/Dark_Brick_Wall_ucmlbhgg_4K_Normal.webp',
+  roughness: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Roughness.webp',
+  ao: '/textures/masonry/light-gray-brick/Light_Gray_Brick_AO.webp',
   params: {
-    roughness: 1.0,        
+    roughness: 0.9,        
     metalness: 0.0,
-    normalScale: 1.0,
-    bumpScale: 0.04,
-    aoIntensity: 1.0,
-    specularIntensity: 0.25,
+    normalScale: 0.6,
+    bumpScale: 0.02,
+    aoIntensity: 0.9,
+    specularIntensity: 0.15,
   },
 }
 
@@ -57,13 +59,15 @@ const MASONRY_DARK_RED_BRICK: MaterialChoice = {
   name: 'Dark Red Brick Wall', 
   albedo: '/textures/masonry/dark-red-brick/Dark_Red_Brick_BaseColor.webp',
   normal: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Normal.webp',
+  roughness: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Roughness.webp',
+  ao: '/textures/masonry/light-gray-brick/Light_Gray_Brick_AO.webp',
   params: {
-    roughness: 1.0,       
+    roughness: 0.9,        
     metalness: 0.0,
-    normalScale: 1.0,
-    bumpScale: 0.04,
-    aoIntensity: 1.0,
-    specularIntensity: 0.25,
+    normalScale: 0.6,
+    bumpScale: 0.02,
+    aoIntensity: 0.9,
+    specularIntensity: 0.15,
   },
 }
 
