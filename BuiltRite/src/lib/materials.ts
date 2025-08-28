@@ -1,5 +1,8 @@
+// src/lib/materials.ts
 import * as THREE from 'three'
 import type { MaterialChoice, PBRChoice } from '../state/useConfigurator'
+
+/* ---------------- Texture loader & cache ---------------- */
 
 const loader = new THREE.TextureLoader()
 const cache = new Map<string, THREE.Texture>()
@@ -12,7 +15,7 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.anisotropy = 8
 
- 
+  // sRGB for albedo/color maps (kept compatible with your types setup)
   if (isColorMap && 'SRGBColorSpace' in THREE) {
     ;(t as any).colorSpace = (THREE as any).SRGBColorSpace
   }
@@ -21,7 +24,46 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   return t
 }
 
-// --------- Window helpers ---------
+/* ---------------- UV helpers (clone before transform!) ---------------- */
+
+function orientTex(
+  tex: THREE.Texture | null | undefined,
+  opts?: {
+    rotation?: number
+    center?: [number, number]
+    repeat?: [number, number]
+    offset?: [number, number]
+  }
+): THREE.Texture | null {
+  if (!tex || !opts) return tex ?? null
+  const t = tex.clone() // do NOT mutate cached/global texture
+  if (opts.center) t.center.set(opts.center[0], opts.center[1])
+  if (opts.rotation != null) t.rotation = opts.rotation
+  if (opts.repeat) t.repeat.set(opts.repeat[0], opts.repeat[1])
+  if (opts.offset) t.offset.set(opts.offset[0], opts.offset[1])
+  t.needsUpdate = true
+  return t
+}
+
+/**
+ * Per-part UV overrides. Add entries as needed.
+ * Note: AO often uses uv2; rotating it may not match unless your geometry's uv2 aligns.
+ */
+const UV_OVERRIDES: Record<
+  string,
+  {
+    rotation?: number
+    center?: [number, number]
+    repeat?: [number, number]
+    offset?: [number, number]
+    rotateAO?: boolean
+  }
+> = {
+  garage_doors: { rotation: Math.PI / 2, center: [0.5, 0.5], rotateAO: false }, // 90° rotation
+}
+
+/* ---------------- Window helpers ---------------- */
+
 export function makeWindowGlass(): THREE.MeshPhysicalMaterial {
   return new THREE.MeshPhysicalMaterial({
     transmission: 0.6,
@@ -36,7 +78,7 @@ export function makeWindowGlass(): THREE.MeshPhysicalMaterial {
     color: new THREE.Color('#a9c6df'),
     transparent: true,
     opacity: 1,
-    depthWrite: false, 
+    depthWrite: false,
     side: THREE.FrontSide,
     envMapIntensity: 1.1,
   })
@@ -50,9 +92,9 @@ export function makeWindowFrame(): THREE.MeshStandardMaterial {
   })
 }
 
+/* ---------------- Base material builder ---------------- */
 
 export function makeMaterial(choice: MaterialChoice): THREE.Material {
-  // Optional: if you ever mark window presets in your config
   if ((choice as any)?.preset === 'window_glass') return makeWindowGlass()
   if ((choice as any)?.preset === 'window_frame') return makeWindowFrame()
 
@@ -64,14 +106,14 @@ export function makeMaterial(choice: MaterialChoice): THREE.Material {
   }
 
   const p = choice as PBRChoice
-  const usePhysical = !!p.specular
+  const usePhysical = !!p.specular // if a specular map is provided, use Physical
 
-  const albedo     = getTex(p.albedo, true)
-  const normalMap  = getTex(p.normal)
-  const roughMap   = getTex(p.roughness)
-  const aoMap      = getTex(p.ao)
-  const bumpMap    = getTex(p.bump)
-  const specMap    = getTex(p.specular)
+  const albedo    = getTex(p.albedo, true)
+  const normalMap = getTex(p.normal)
+  const roughMap  = getTex(p.roughness)
+  const aoMap     = getTex(p.ao)
+  const bumpMap   = getTex(p.bump)
+  const specMap   = getTex(p.specular)
 
   const params = p.params ?? {}
 
@@ -90,11 +132,11 @@ export function makeMaterial(choice: MaterialChoice): THREE.Material {
     if (normalMap) mat.normalScale = new THREE.Vector2(params.normalScale ?? 1, params.normalScale ?? 1)
     if (aoMap) mat.aoMapIntensity = params.aoIntensity ?? 1.0
 
+    // Specular workflow (MeshPhysicalMaterial)
     if ('specularIntensity' in mat) {
       ;(mat as any).specularIntensity = params.specularIntensity ?? 0.25
       if (specMap) (mat as any).specularIntensityMap = specMap
     }
-
     return mat
   }
 
@@ -114,6 +156,26 @@ export function makeMaterial(choice: MaterialChoice): THREE.Material {
 
   return mat
 }
+
+/* ---------------- Per-part wrapper with UV overrides ---------------- */
+
+export function makeMaterialForPart(partId: string, choice: MaterialChoice): THREE.Material {
+  const mat = makeMaterial(choice) as THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial
+  const uvo = UV_OVERRIDES[partId]
+  if (!uvo) return mat
+
+  // Rotate/transform clones so other parts keep original orientation
+  if (mat.map)          mat.map          = orientTex(mat.map, uvo)!
+  if (mat.normalMap)    mat.normalMap    = orientTex(mat.normalMap, uvo)!
+  if (mat.roughnessMap) mat.roughnessMap = orientTex(mat.roughnessMap, uvo)!
+  if (mat.bumpMap)      mat.bumpMap      = orientTex(mat.bumpMap, uvo)!
+  if (uvo.rotateAO && mat.aoMap) mat.aoMap = orientTex(mat.aoMap, uvo)!
+
+  mat.needsUpdate = true
+  return mat
+}
+
+
 
 
 
