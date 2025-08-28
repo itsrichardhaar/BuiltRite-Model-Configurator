@@ -9,6 +9,7 @@ const MASONRY_TAN_BRICK: MaterialChoice = {
   albedo: '/textures/masonry/tan-brick/Tan_Brick_BaseColor.webp',
   normal: '/textures/masonry/tan-brick/Tan_Brick_Normal.webp',
   roughness: '/textures/masonry/tan-brick/Tan_Brick_Roughness.webp',
+  ao: '/textures/masonry/tan-brick/Tan_Brick_AO.webp',
    params: {
     roughness: 1.0,        
     metalness: 0.0,
@@ -24,6 +25,8 @@ const MASONRY_LIGHT_GRAY_BRICK: MaterialChoice = {
   name: 'Mastonry Light Gray Brick Wall', 
   albedo: '/textures/masonry/light-gray-brick/Light_Gray_Brick_BaseColor.webp',
   normal: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Normal.webp',
+  roughness: '',
+  ao: '/textures/masonry/light-gray-brick/Light_Gray_Brick_AO.webp',
    params: {
     roughness: 1.0,        
     metalness: 0.0,
@@ -52,8 +55,8 @@ const MASONRY_GRAY_BRICK: MaterialChoice = {
 const MASONRY_DARK_RED_BRICK: MaterialChoice = { 
   type: 'pbr', 
   name: 'Dark Red Brick Wall', 
-  albedo: '/textures/masonry/dark-red-brick/red_brick_diff_4k.jpg',
-  normal: '/textures/masonry/dark-red-brick/red_brick_diff_4k.jpg',
+  albedo: '/textures/masonry/dark-red-brick/Dark_Red_Brick_BaseColor.webp',
+  normal: '/textures/masonry/light-gray-brick/Light_Gray_Brick_Normal.webp',
   params: {
     roughness: 1.0,       
     metalness: 0.0,
@@ -68,7 +71,7 @@ const MASONRY_BRIGHT_BRICK: MaterialChoice = {
   type: 'pbr', 
   name: 'Bright Brick Wall', 
   albedo: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
-  normal: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_BaseColor.webp',
+  normal: '/textures/masonry/bright-brick/Brick_Wall_Bright_tg1mbdbi_4K_Normal.webp',
   params: {
     roughness: 1.0,      
     metalness: 0.0,
