@@ -256,7 +256,7 @@ function eq(a?: MaterialChoice | null, b?: MaterialChoice | null) {
 }
 
 function inferCategory(opt: MaterialChoice): Cat | null {
-  if (opt.type === 'color') return 'Color'
+  if (opt.type === 'color') return 'Metal'
 
   const text = [
     opt.type === 'pbr' ? opt.albedo : '',

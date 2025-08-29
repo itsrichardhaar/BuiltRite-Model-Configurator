@@ -422,11 +422,16 @@ const SPLIT_FACE_BEIGE: MaterialChoice = {
 }
 
 //Awning colors
-const AWNING_WHITE: MaterialChoice = { type: 'color', name: 'White',       value: '#ffffff' }
-const AWNING_BLACK: MaterialChoice = { type: 'color', name: 'Black',       value: '#111111' }
-const AWNING_BRONZE: MaterialChoice = { type: 'color', name: 'Dark Bronze', value: '#3b3b3b' }
-const AWNING_GREY: MaterialChoice = { type: 'color', name: 'Gray',         value: '#8a8f98' }
-const AWNING_RED: MaterialChoice = { type: 'color', name: 'Red',           value: '#D7282F'}
+const AWNING_TRUE_BLACK: MaterialChoice = { type: 'color', name: 'True Black',       value: '#101010' }
+const AWNING_RUSTIC_RED: MaterialChoice = { type: 'color', name: 'Rustic Red',       value: '#5c1515' }
+const AWNING_SCARLET_RED: MaterialChoice = { type: 'color', name: 'Scarlet Red',       value: '#aa0000' }
+const AWNING_EVERGREEN: MaterialChoice = { type: 'color', name: 'Evergreen', value: '#384b38' }
+const AWNING_CHARCOAL_GRAY: MaterialChoice = { type: 'color', name: 'Charcoal Gray',         value: '#333333' }
+const AWNING_ASHE_GRAY: MaterialChoice = { type: 'color', name: 'Ashe Gray',           value: '#7e7e7e'}
+const AWNING_COFFE_BROWN: MaterialChoice = { type: 'color', name: 'Coffee Brown',           value: '#4f3924'}
+const AWNING_SADDLE_TAN: MaterialChoice = { type: 'color', name: 'Saddle Tan',           value: '#855526'}
+const AWNING_LIGHT_STONE: MaterialChoice = { type: 'color', name: 'Light Stone',           value: '#c4c4ba'}
+const AWNING_COBALT: MaterialChoice = { type: 'color', name: 'Cobalt',           value: '#284fa7'}
 
 //Rolling doors
 
@@ -438,8 +443,8 @@ export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
   top_trim:     [STUCCO_WALL_YELLOW_TAN, STUCCO_WALL_LIGHT_GRAY, STUCCO_WALL_DARK_GRAY, STUCCO_WALL_WHITE, METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE],
   metal_panels: [METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE],
   roof:         [METAL_RUSTIC_RED],
-  awning:       [METAL_RUSTIC_RED, AWNING_WHITE, AWNING_BLACK, AWNING_BRONZE, AWNING_GREY, AWNING_RED],
-  foundation:   [AWNING_BLACK],
+  awning:       [AWNING_SCARLET_RED, AWNING_RUSTIC_RED, AWNING_TRUE_BLACK, AWNING_EVERGREEN, AWNING_CHARCOAL_GRAY, AWNING_ASHE_GRAY, AWNING_COFFE_BROWN, AWNING_SADDLE_TAN, AWNING_LIGHT_STONE, AWNING_COBALT],
+  foundation:   [AWNING_TRUE_BLACK],
   garage_doors: [METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE],
 }
 
