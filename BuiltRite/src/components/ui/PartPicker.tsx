@@ -5,8 +5,8 @@ import { PARTS } from '../../config/parts'
 import { TEXTURE_SETS } from '../../config/textures'
 import { useConfigurator, type ConfigState, type MaterialChoice } from '../../state/useConfigurator'
 
-type Cat = 'Color' | 'Masonry' | 'Metal' | 'Stone' | 'Stucco' | 'Split Face'
-const ALL_CATS: Cat[] = ['Color', 'Masonry', 'Stone', 'Stucco', 'Split Face', 'Metal']
+type Cat = 'Color' | 'Masonry' | 'Metal' | 'Stone' | 'EIFS' | 'Split Face'
+const ALL_CATS: Cat[] = ['Color', 'Masonry', 'Stone', 'EIFS', 'Split Face', 'Metal']
 
 // Order of PARTS ids
 const PREFERRED_PART_ORDER = [
@@ -298,8 +298,9 @@ function inferCategory(opt: MaterialChoice): Cat | null {
     inFolder('stucco') ||
     has('stucco') ||
     has('render') ||
-    has('plaster')
-  ) return 'Stucco'
+    has('plaster') ||
+    has('EIFS')
+  ) return 'EIFS'
 
   if (
     inFolder('masonry') ||
