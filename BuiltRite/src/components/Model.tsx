@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { makeWindowGlass, makeWindowFrame, makeMaterialForPart, makeLogoMaterial } from '../lib/materials'
+import { makeWindowGlass, makeWindowFrame, makeMaterialForPart } from '../lib/materials'
 import { PARTS } from '../config/parts'
 import { TEXTURE_SETS } from '../config/textures'
 import { useConfigurator, type ConfigState } from '../state/useConfigurator'
@@ -183,26 +183,6 @@ export default function Model() {
     })
 
     // LOGO
-
-    const logoMat = makeLogoMaterial('#fff')
-
-    root.traverse((o: any) => {
-      if (!o?.isMesh) return
-      const nodeName = (o.name || '').toLowerCase()
-      const geomName = (o.geometry?.name || '').toLowerCase()
-      const matName  = (o.material?.name || '').toLowerCase()
-
-      // robust detection: node or material has 'logo' (also catches your BR_logo)
-      const looksLikeLogo =
-        nodeName.includes('logo') || matName.includes('logo') || geomName.includes('logo')
-
-      if (looksLikeLogo) {
-        o.material = logoMat
-        o.castShadow = true
-        o.receiveShadow = true
-        fixedMaterialUUIDs.current.add(o.uuid) // <- prevents later overrides in the per-frame pass
-      }
-    })
 
     // WINDOWS
     const glassMat = makeWindowGlass()

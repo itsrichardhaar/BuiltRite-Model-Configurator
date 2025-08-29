@@ -433,7 +433,11 @@ const AWNING_SADDLE_TAN: MaterialChoice = { type: 'color', name: 'Saddle Tan',  
 const AWNING_LIGHT_STONE: MaterialChoice = { type: 'color', name: 'Light Stone',           value: '#c4c4ba'}
 const AWNING_COBALT: MaterialChoice = { type: 'color', name: 'Cobalt',           value: '#284fa7'}
 
-//Rolling doors
+
+//Logo colors
+const LOGO_TRUE_BLACK: MaterialChoice = { type: 'color', name: 'True Black',       value: '#101010' }
+const LOGO_BRAND_RED: MaterialChoice = { type: 'color', name: 'Scarlet Red',       value: '#D7282F' }
+const LOGO_TRUE_WHITE: MaterialChoice = { type: 'color', name: 'Evergreen', value: '#ffffff' }
 
 
 
@@ -446,6 +450,7 @@ export const TEXTURE_SETS: Record<string, MaterialChoice[]> = {
   awning:       [AWNING_SCARLET_RED, AWNING_RUSTIC_RED, AWNING_TRUE_BLACK, AWNING_EVERGREEN, AWNING_CHARCOAL_GRAY, AWNING_ASHE_GRAY, AWNING_COFFE_BROWN, AWNING_SADDLE_TAN, AWNING_LIGHT_STONE, AWNING_COBALT],
   foundation:   [AWNING_TRUE_BLACK],
   garage_doors: [METAL_SCARLET_RED, METAL_RUSTIC_RED, METAL_COBALT_BLUE, METAL_LIGHT_STONE, METAL_EVERGREEN, METAL_SADDLE_TAN, METAL_COFFEE_BROWN, METAL_TRUE_BLACK, METAL_ASHE_GRAY, METAL_CHARCOAL_GRAY, METAL_BRIGHT_WHITE],
+  logo: [LOGO_TRUE_BLACK, LOGO_BRAND_RED, LOGO_TRUE_WHITE],
 }
 
 
