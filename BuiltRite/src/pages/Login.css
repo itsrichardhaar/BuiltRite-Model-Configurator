@@ -6,24 +6,25 @@
 }
 
 .login-shell {
-  min-height: 100vh;
+  position: fixed;
+  inset: 0;                 /* top:0 right:0 bottom:0 left:0 */
   display: grid;
   place-items: center;
   background: radial-gradient(circle at top, #f3f4f6 0%, #e5e7eb 60%, #d1d5db 100%);
-  padding: 24px;
-  position: relative;
   font-family: var(--login-font);
+  overflow: hidden;         /* no scroll */
+  box-sizing: border-box;
+  padding: 20px;            /* will be reduced on very small screens */
 }
 
 .login-brand {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 14px;
+  left: 14px;
 }
 
-
 .login-logo {
-  height: 40px;
+  height: 36px;
   width: auto;
   display: block;
 }
@@ -31,43 +32,42 @@
 .login-card {
   background: #ffffff;
   border: 1px solid rgba(15, 23, 42, 0.05);
-  border-radius: 18px;
-  padding: 28px 28px 22px;
-  width: min(380px, 100%);
+  border-radius: 16px;
+  padding: 24px 24px 18px;
+  width: min(360px, 100%);
+  max-height: 90vh;         /* just in case */
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
-  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .login-title {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   color: #0f172a;
-  font-family: inherit;
 }
 
 .login-subtitle {
   color: #475569;
-  font-size: 14px;
-  margin-bottom: 18px;
-  font-family: inherit;
+  font-size: 13.5px;
+  margin-bottom: 6px;
 }
 
 .login-form {
   display: grid;
-  gap: 14px;
-  font-family: inherit;
+  gap: 12px;
 }
 
 .login-label {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   font-size: 12px;
   font-weight: 600;
   color: #0f172a;
-  font-family: inherit;
 }
 
 .login-input {
@@ -79,6 +79,7 @@
   background: #fff;
   transition: border-color 0.12s ease;
   font-family: inherit;
+  min-height: 36px;
 }
 
 .login-input:focus {
@@ -95,7 +96,7 @@
   font-size: 14px;
   cursor: pointer;
   transition: transform 0.08s ease;
-  font-family: inherit;
+  min-height: 38px;
 }
 
 .login-button:active {
@@ -114,37 +115,48 @@
   border-radius: 10px;
   padding: 6px 10px;
   font-size: 12px;
-  font-family: inherit;
 }
 
 .login-secondary {
   background: transparent;
   border: none;
-  margin-top: 16px;
+  margin-top: 4px;
   color: #0f172a;
   font-size: 13px;
   cursor: pointer;
   text-decoration: underline;
-  font-family: inherit;
+  align-self: flex-start;
 }
 
 .login-footer {
   position: absolute;
-  bottom: 14px;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 11px;
   color: rgba(15, 23, 42, 0.45);
-  font-family: inherit;
+  white-space: nowrap;
 }
 
-@media (max-width: 500px) {
-  .login-card {
-    padding: 22px 20px 18px;
-  }
+/* super small screens: tighten padding to avoid overflow */
+@media (max-height: 560px) {
   .login-shell {
-    padding: 12px;
+    padding: 10px;
+  }
+  .login-card {
+    padding: 20px 18px 14px;
+    gap: 10px;
+  }
+  .login-brand {
+    top: 8px;
+    left: 8px;
+  }
+  .login-logo {
+    height: 30px;
   }
   .login-footer {
-    position: static;
-    margin-top: 16px;
+    bottom: 4px;
   }
 }
+
+
