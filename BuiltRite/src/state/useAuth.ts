@@ -16,15 +16,12 @@ export const useAuth = create<AuthState>((set) => ({
   loading: true,
 
   init: async () => {
-    // get current session on app load
     const { data } = await supabase.auth.getSession()
     set({
       user: data.session?.user ?? null,
       session: data.session ?? null,
       loading: false,
     })
-
-    // listen to changes
     supabase.auth.onAuthStateChange((_event, session) => {
       set({
         user: session?.user ?? null,

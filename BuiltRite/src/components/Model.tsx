@@ -65,7 +65,6 @@ function applyOffsetJitterOnce(material: any, seed: string) {
   const apply = (mat: any) => {
     if (!mat || (mat.userData && mat.userData._jittered)) return
 
-    // skip glass so it stays clean
     if (mat.isMeshPhysicalMaterial && typeof mat.transmission === 'number' && mat.transmission > 0.2) {
       mat.userData = { ...(mat.userData || {}), _jittered: true }
       return
@@ -142,7 +141,6 @@ export default function Model() {
       o.castShadow = true
       o.receiveShadow = true
 
-      // Force uv2 for AO if missing
       if (o.geometry && !o.geometry.attributes.uv2 && o.geometry.attributes.uv) {
         o.geometry.setAttribute('uv2', o.geometry.attributes.uv)
       }
@@ -155,7 +153,7 @@ export default function Model() {
       }
     })
 
-    // Place on ground & compute shadow plane
+    // Place on ground & create shadow plane
     const box = new THREE.Box3().setFromObject(root)
     const minY = box.min.y
     if (isFinite(minY)) root.position.y -= minY
@@ -163,7 +161,7 @@ export default function Model() {
     box.getSize(size)
     setFootprint({ x: size.x * 1.2, z: size.z * 1.2 })
 
-    // Make GLB "ground" meshes unlit
+    // Make "ground" meshes unlit
     const GROUND_NAME_HITS = ['floor_plane', 'ground'] as const
     root.traverse((o: any) => {
       if (!o?.isMesh) return
@@ -182,9 +180,6 @@ export default function Model() {
       }
     })
 
-    // LOGO
-
-    // WINDOWS
     const glassMat = makeWindowGlass()
     const frameMat = makeWindowFrame()
 
@@ -222,7 +217,6 @@ export default function Model() {
     })
   }, [root])
 
-  // Apply materials per-part (with per-part UV overrides)
   useFrame(() => {
     root.traverse((obj: any) => {
       if (!obj?.isMesh) return
@@ -240,10 +234,8 @@ export default function Model() {
       const mat = makeMaterialForPart(partId, sel)
       obj.material = Array.isArray(obj.material) ? obj.material.map(() => mat) : mat
 
-      // Jitter once per mesh to break tiling synch
       applyOffsetJitterOnce(obj.material, obj.uuid)
 
-      // UV tiling per part
       const scale = PART_UV_SCALE[partId] ?? DEFAULT_UV_SCALE
       if (scale !== 1) scaleUVsOnce(obj, scale)
 
@@ -270,7 +262,6 @@ export default function Model() {
       {/* GLB */}
       <primitive object={root} />
 
-      {/* Single shadow receiver plane (slightly lifted to avoid z-fighting) */}
       <mesh rotation-x={-Math.PI / 2} position={[0, 0.005, 0]} receiveShadow>
         <planeGeometry args={[footprint.x, footprint.z]} />
         <shadowMaterial color="#000" opacity={0.28} transparent />

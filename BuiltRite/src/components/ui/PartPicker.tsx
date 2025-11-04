@@ -306,7 +306,7 @@ function inferCategory(opt: MaterialChoice): Cat | null {
     inFolder('masonry') ||
     has('masonry') ||
     has('brick') ||
-    has('concrete') ||   // move concrete here
+    has('concrete') ||   
     has('cement') ||
     has('cmu') ||
     has('block')

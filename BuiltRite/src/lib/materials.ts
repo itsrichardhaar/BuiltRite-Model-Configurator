@@ -15,7 +15,6 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.anisotropy = 8
 
-  // sRGB for albedo/color maps (kept compatible with your types setup)
   if (isColorMap && 'SRGBColorSpace' in THREE) {
     ;(t as any).colorSpace = (THREE as any).SRGBColorSpace
   }
@@ -23,8 +22,6 @@ function getTex(url?: string, isColorMap = false): THREE.Texture | null {
   cache.set(url, t)
   return t
 }
-
-/* ---------------- UV helpers (clone before transform!) ---------------- */
 
 function orientTex(
   tex: THREE.Texture | null | undefined,
@@ -36,7 +33,7 @@ function orientTex(
   }
 ): THREE.Texture | null {
   if (!tex || !opts) return tex ?? null
-  const t = tex.clone() // do NOT mutate cached/global texture
+  const t = tex.clone() 
   if (opts.center) t.center.set(opts.center[0], opts.center[1])
   if (opts.rotation != null) t.rotation = opts.rotation
   if (opts.repeat) t.repeat.set(opts.repeat[0], opts.repeat[1])
@@ -45,10 +42,6 @@ function orientTex(
   return t
 }
 
-/**
- * Per-part UV overrides. Add entries as needed.
- * Note: AO often uses uv2; rotating it may not match unless your geometry's uv2 aligns.
- */
 const UV_OVERRIDES: Record<
   string,
   {
@@ -100,8 +93,7 @@ export function makeLogoMaterial(color = '#000') {
     color,
     roughness: 0.55,
     metalness: 0.05,
-    emissive: '#000000',   // tweak if you want slight glow
-    // emissiveIntensity: 0.25,
+    emissive: '#000000',   
   })
   return m
 }
@@ -120,7 +112,7 @@ export function makeMaterial(choice: MaterialChoice): THREE.Material {
   }
 
   const p = choice as PBRChoice
-  const usePhysical = !!p.specular // if a specular map is provided, use Physical
+  const usePhysical = !!p.specular 
 
   const albedo    = getTex(p.albedo, true)
   const normalMap = getTex(p.normal)
@@ -146,7 +138,6 @@ export function makeMaterial(choice: MaterialChoice): THREE.Material {
     if (normalMap) mat.normalScale = new THREE.Vector2(params.normalScale ?? 1, params.normalScale ?? 1)
     if (aoMap) mat.aoMapIntensity = params.aoIntensity ?? 1.0
 
-    // Specular workflow (MeshPhysicalMaterial)
     if ('specularIntensity' in mat) {
       ;(mat as any).specularIntensity = params.specularIntensity ?? 0.25
       if (specMap) (mat as any).specularIntensityMap = specMap

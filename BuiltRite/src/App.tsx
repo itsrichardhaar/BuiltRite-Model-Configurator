@@ -23,14 +23,12 @@ export default function App() {
         path="/app"
         element={
           <Protected>
-            {/* this is your current UI unchanged */}
             <div style={{ height: '100vh', width: '100vw', position: 'relative' }}>
               <Viewer />
             </div>
           </Protected>
         }
       />
-      {/* default to /app */}
       <Route path="*" element={<Navigate to="/app" replace />} />
     </Routes>
   )

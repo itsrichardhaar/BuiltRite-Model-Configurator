@@ -11,8 +11,6 @@ export default function Viewer() {
   const AZIMUTH_DEG = 35;   
   const ELEVATION_DEG = 60; 
   const DIST = 100;
-
-  // Convert spherical → Cartesian
   const phi = THREE.MathUtils.degToRad(90 - ELEVATION_DEG);
   const theta = THREE.MathUtils.degToRad(AZIMUTH_DEG);
   const lx = DIST * Math.sin(phi) * Math.cos(theta);
@@ -32,38 +30,25 @@ export default function Viewer() {
         }}
       >
         
-        {/* Softer ambient to keep contrast in shadows */}
         <ambientLight intensity={0.9} />
 
-        {/* Key directional light (casts shadow) */}
         <directionalLight
           position={[lx, ly, lz]}
           target-position={[0, 0, 0]}
           intensity={1.25}
           castShadow
-
-          // Shadow map
           shadow-mapSize-width={4096}
           shadow-mapSize-height={4096}
-
-          // Tighter orthographic shadow camera around the model
           shadow-camera-near={10}
           shadow-camera-far={160}
           shadow-camera-left={-35}
           shadow-camera-right={35}
           shadow-camera-top={35}
           shadow-camera-bottom={-35}
-
-          // Bias tuning 
           shadow-bias={-0.00015}
           shadow-normalBias={0.02}
-
-          // Small kernel blur for PCF
           shadow-radius={50}
         />
-
-        {/* If you want a non-shadowing fill: */}
-        {/* <directionalLight position={[0, 18, 60]} intensity={0.5} castShadow={false} /> */}
 
         <Model />
 
@@ -74,8 +59,6 @@ export default function Viewer() {
           target={[0, 0, 0]}
         />
       </Canvas>
-
-      {/* UI overlays unchanged */}
       <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 10 }}>
         <img src="/images/BRSS_logo.png" alt="Logo" style={{ height: 40, width: 'auto', display: 'block' }} />
       </div>

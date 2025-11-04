@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../state/useAuth'
 import { useNavigate } from 'react-router-dom'
-import './Login.css' // <- create this file (below)
+import './Login.css' 
 
 export default function LoginPage() {
   const { user } = useAuth()
@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   if (user) {
-    // already logged in → go to app
     navigate('/app')
   }
 
@@ -27,7 +26,6 @@ export default function LoginPage() {
       if (mode === 'signup') {
         const { error } = await supabase.auth.signUp({ email, password })
         if (error) throw error
-        // after signup you can send them to /app or show "check your email"
         navigate('/app')
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -43,7 +41,6 @@ export default function LoginPage() {
 
   return (
     <div className="login-shell">
-      {/* optional logo spot */}
       <div className="login-brand">
         <img src="/images/BRSS_logo.png" alt="Logo" className="login-logo" />
       </div>

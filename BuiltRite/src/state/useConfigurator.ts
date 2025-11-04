@@ -3,7 +3,7 @@ import { create } from 'zustand'
 export type ColorChoice = {
   type: 'color'
   name: string
-  value: string // hex color
+  value: string
 }
 
 export type PBRChoice = {
@@ -13,15 +13,15 @@ export type PBRChoice = {
   normal?: string
   roughness?: string
   ao?: string
-  bump?: string            // NEW
-  specular?: string        // NEW (for specular workflow / physical specular)
-  params?: {               // NEW: per-material overrides
+  bump?: string            
+  specular?: string       
+  params?: {             
     roughness?: number
     metalness?: number
-    normalScale?: number   // 1.0 = default; try 0.5–2
-    bumpScale?: number     // 0 disables bump
-    aoIntensity?: number   // 1 = default
-    specularIntensity?: number // 0..1 (MeshPhysicalMaterial)
+    normalScale?: number  
+    bumpScale?: number    
+    aoIntensity?: number  
+    specularIntensity?: number 
     
   }
 }
@@ -51,7 +51,6 @@ export const useConfigurator = create<ConfigState>((set) => ({
   rotationX: 0,
   rotateXBy: (delta) =>
     set((s) => {
-      // Clamp pitch to avoid flipping the model in Orbit-style UX
       const MAX_PITCH = Math.PI / 2.5; // ~72°
       const next = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, s.rotationX + delta))
       return { rotationX: next }
